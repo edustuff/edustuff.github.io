@@ -1,16 +1,46 @@
 <!DOCTYPE html>
 <html>
-<body>
 
-<button onclick="newClock();">Change Time</button>
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="user-scalable=no, width=device-width" />
+    <link rel="apple-touch-icon" href="Icon2dx.png" />
+</head>
 
-<canvas id="canvas" width="400" height="400"
-        style="background-color:white">
+<style>
+    #canvas-container {
+    width: 100%;
+    text-align:center;
+    }
+
+    button {
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+    }
+</style>
+
+<body ontouchmove="BlockMove(event);">
+
+<button onclick="newClock();" style="font-size:large">Change Time</button>
+<br>
+<div id="canvas-container">
+<canvas id="canvas" style="background-color:white">
 </canvas>
+</div>
+<br>
 
 <script>
 
+function BlockMove(event) {
+  // Tell Safari not to move the window.
+  event.preventDefault() ;
+}
+
 var canvas = document.getElementById("canvas");
+canvas.width = Math.min(document.documentElement.clientHeight, document.documentElement.clientWidth) * 0.8;
+canvas.height = canvas.width;
 var ctx = canvas.getContext("2d");
 var radius = canvas.height / 2;
 ctx.translate(radius, radius);
