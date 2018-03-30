@@ -25,7 +25,6 @@
 
   #target {
     margin-top: 50px;
-    font-family: "Zapf Dingbats";
     font-weight: 100;
     font-size: 150px;
     color: blue;
@@ -34,7 +33,6 @@
 
   #aim {
     margin-top: 50px;
-    font-family: "Zapf Dingbats";
     font-weight: 100;
     font-size: 150px;
     color: red;
@@ -72,8 +70,8 @@ function newSymbol() {
 
     randomSymbol = (Math.random() * 218) + 33
 
-    document.getElementById("target").innerHTML = String.fromCharCode(randomSymbol);
-    document.getElementById("aim").innerHTML = String.fromCharCode(randomSymbol);
+    document.getElementById("target").innerHTML = "&#x263a;" //String.fromCharCode(randomSymbol);
+    document.getElementById("aim").innerHTML = "&#x263a;" //String.fromCharCode(randomSymbol);
 
     randomAngle = Math.floor((Math.random() * 240) + 30);
     randomAngle = Math.round(randomAngle / 30) * 30;
