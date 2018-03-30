@@ -68,10 +68,10 @@ function compare() {
 
 function newSymbol() {
 
-    randomSymbol = (Math.random() * 218) + 33
+    randomSymbol = Math.round((Math.random() * 20991)) + 19968
 
-    document.getElementById("target").innerHTML = "&#x263a;" //String.fromCharCode(randomSymbol);
-    document.getElementById("aim").innerHTML = "&#x263a;" //String.fromCharCode(randomSymbol);
+    document.getElementById("target").innerHTML = "&#" + randomSymbol + ";" //String.fromCharCode(randomSymbol);
+    document.getElementById("aim").innerHTML = "&#" + randomSymbol + ";" //String.fromCharCode(randomSymbol);
 
     randomAngle = Math.floor((Math.random() * 240) + 30);
     randomAngle = Math.round(randomAngle / 30) * 30;
