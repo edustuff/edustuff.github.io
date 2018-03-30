@@ -77,7 +77,16 @@ function newSymbol() {
 
     randomAngle = Math.floor((Math.random() * 240) + 30);
     randomAngle = Math.round(randomAngle / 30) * 30;
+
+    randomAngle2 = randomAngle;
+
+    while (randomAngle == randomAngle2) {
+        randomAngle2 = Math.floor((Math.random() * 240) + 30);
+        randomAngle2 = Math.round(randomAngle2 / 30) * 30;
+    }
+
     document.getElementById("aim").style.webkitTransform = "rotate(" + (randomAngle) + "deg)";
+    document.getElementById("target").style.webkitTransform = "rotate(" + (randomAngle2) + "deg)";
 
 }
 
