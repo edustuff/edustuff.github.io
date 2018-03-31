@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="user-scalable=no, width=device-width" />
+    <link rel="apple-touch-icon" href="Icon2dx.png" />
+</head>
+
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    #number {
+        font-size: 500%;
+        text-align: center;
+    }
+</style>
+<body>
+<div>
+    <button onclick="next();" style="border-style: solid; border-width: medium; font-size: 150%;">Next</button>
+</div>
+<br>
+<br>
+<div id="number">
+
+<script>
+
+next();
+
+function next() {
+    n1 = Math.floor(Math.random() * 9) + 1;
+    n2 = Math.floor(Math.random() * 9);
+    n3 = Math.floor(Math.random() * 9);
+    document.getElementById("number").innerHTML = n1 + "" + n2 + "" + n3;
+}
+
+</script>
+
