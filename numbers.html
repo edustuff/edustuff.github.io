@@ -33,6 +33,19 @@ function next() {
     n1 = Math.floor(Math.random() * 9) + 1;
     n2 = Math.floor(Math.random() * 9);
     n3 = Math.floor(Math.random() * 9);
+
+    switchToZero1 = Math.floor(Math.random() * 2);
+    switchToZero2 = Math.floor(Math.random() * 2);
+
+    if (switchToZero1 == 0)
+    {
+        n2 = 0;
+    }
+    else
+    {
+        if (switchToZero2 == 0) n3 = 0;
+    }
+
     document.getElementById("number").innerHTML = n1 + "" + n2 + "" + n3;
 }
 
