@@ -22,8 +22,9 @@ var locationMarker;
 /*
  * use google maps api built-in mechanism to attach dom events
  */
-google.maps.event.addDomListener(window, "load", function () {
+<!--google.maps.event.addDomListener(window, "load", function () {-->
 
+function CustomGoogleMaps() {
 
 
   /*
@@ -391,10 +392,14 @@ google.maps.event.addDomListener(window, "load", function () {
   createMarker({position: new google.maps.LatLng("51.59449", "0.683408"),map: map, icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"}, "<p><b>Church (51.59449,0.683408)<br>SS5 4LL</b><br>Bus time to Westcliff: 29 minutes (score: 44%)<br>Car time to St Cedds: 41 minutes (score: 0%)<br>Total travel time: 70 minutes (score: 38%)<br>Equality score: 77%<br>The King Edmund School (Distance: 1.8km, Ofsted: Good, Deprivation: Average)</p>");
 
 
-});
+}
 </script>
+
 <body>
+<H1>
 HELLO
+<button onclick="CustomGoogleMaps();">Load Map</button>
+</H1>
 <div id="map_div" style="height:100vh;"></div>
 </body>
 </html>
