@@ -81,6 +81,9 @@ button {
 
 </head>
 
+<script src="questions/indicies.js"></script>
+<script src="questions/percentages.js"></script>
+
 <script>
 
     var totalScore = 0;
@@ -92,36 +95,16 @@ button {
 
     var timer;
 
-    var questions = [];
+    var questions = getPercentageQuestions();
     var uniqueAnswers = [];
 
-    for (i = 1; i <= 14; i++) {
-        questions.push({question : i + "<sup>2</sup>", answer: i * i});
-        questions.push({question : i + " x " + i, answer: i * i});
-    }
 
-    for (i = 1; i <= 5; i++) {
-        questions.push({question : i + "<sup>3</sup>", answer: i * i * i});
-        questions.push({question : i + " x " + i + " x " + i, answer: i * i * i});
-    }
-
-    for (i = 1; i <= 3; i++) {
-        questions.push({question : i + "<sup>4</sup>", answer: i * i * i * i});
-        questions.push({question : i + " x " + i + " x " + i  + " x " + i, answer: i * i * i * i});
-    }
-
-    for (i = 1; i <= 3; i++) {
-        questions.push({question : i + "<sup>5</sup>", answer: i * i * i * i * i});
-        questions.push({question : i + " x " + i + " x " + i  + " x " + i  + " x " + i, answer: i * i * i * i * i});
-    }
 
 
     var questions2 = [
-      {question : "1", answer: "1<sup>1</sup>"}
       // questions1 reversed
     ];
 
-    // timer
 
     function showStartScreen() {
         document.getElementById("startScreen").style.visibility= 'visible' ;
@@ -270,7 +253,16 @@ button {
     }
 
     function shuffle(array) {
-        array.sort(() => Math.random() - 0.5);
+      for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+
+        // swap elements array[i] and array[j]
+        // we use "destructuring assignment" syntax to achieve that
+        // you'll find more details about that syntax in later chapters
+        // same can be written as:
+        // let t = array[i]; array[i] = array[j]; array[j] = t
+        [array[i], array[j]] = [array[j], array[i]];
+      }
     }
 
 </script>
