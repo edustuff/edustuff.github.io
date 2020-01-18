@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  background: rgba(24, 153, 218, 1);
+}
+
+* {
+   font-family: sans-serif;
+}
+
+.grid-item {
+  padding-top:30px;
+  padding-bottom:30px;
+  border-radius: 25px;
+  background: rgb(240, 139, 37, 1);
+  background: linear-gradient(45deg, rgba(240, 139, 37, 1) 0%, rgba(229, 63, 50, 1) 100%);
+  border: 10px solid rgba(24, 153, 218, 1);
+  font-size: 46px;
+  text-align: center;
+}
+
+.container {
+    background-color: rgba(25, 68, 146, 1);
+}
+
+body {
+    background-color: rgba(25, 68, 146, 1);
+}
+
+button {
+  margin-top: auto;
+  margin-button: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#question {
+  padding: 20px;
+  color: #ff3;
+  font-size: 92px;
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+#timeRemaining,#score,#finalScore {
+  padding: 20px;
+  color: #fff;
+  font-size: 36px;
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+#gameScreen, #endScreen {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    visibility: hidden;
+}
+
+#startScreen {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+}
+
+
+
+</style>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="user-scalable=no, width=device-width" />
+    <link rel="apple-touch-icon" href="Icon2dx.png" />
+
+</head>
+
+<script>
+
+    var totalScore = 0;
+    var timeRemaining = 60;
+    var correctTotal = 0;
+    var incorrectTotal = 0;
+    var currentQuestionId = 0;
+    var numberOfQuestions = 12;
+
+    var timer;
+
+    var questions = [];
+    var uniqueAnswers = [];
+
+    for (i = 1; i <= 14; i++) {
+        questions.push({question : i + "<sup>2</sup>", answer: i * i});
+        questions.push({question : i + " x " + i, answer: i * i});
+    }
+
+    for (i = 1; i <= 5; i++) {
+        questions.push({question : i + "<sup>3</sup>", answer: i * i * i});
+        questions.push({question : i + " x " + i + " x " + i, answer: i * i * i});
+    }
+
+    for (i = 1; i <= 3; i++) {
+        questions.push({question : i + "<sup>4</sup>", answer: i * i * i * i});
+        questions.push({question : i + " x " + i + " x " + i  + " x " + i, answer: i * i * i * i});
+    }
+
+    for (i = 1; i <= 3; i++) {
+        questions.push({question : i + "<sup>5</sup>", answer: i * i * i * i * i});
+        questions.push({question : i + " x " + i + " x " + i  + " x " + i  + " x " + i, answer: i * i * i * i * i});
+    }
+
+
+    var questions2 = [
+      {question : "1", answer: "1<sup>1</sup>"}
+      // questions1 reversed
+    ];
+
+    // timer
+
+    function showStartScreen() {
+        document.getElementById("startScreen").style.visibility= 'visible' ;
+    }
+
+    function hideStartScreen() {
+        document.getElementById("startScreen").style.visibility= 'hidden' ;
+    }
+
+    function showGameScreen() {
+        document.getElementById("gameScreen").style.visibility= 'visible' ;
+    }
+
+    function hideGameScreen() {
+        document.getElementById("gameScreen").style.visibility= 'hidden' ;
+    }
+
+        function showEndScreen() {
+        document.getElementById("endScreen").style.visibility= 'visible' ;
+    }
+
+    function hideEndScreen() {
+        document.getElementById("endScreen").style.visibility= 'hidden' ;
+    }
+
+    function initialiseGame() {
+
+        totalScore = 0;
+        timeRemaining = 60;
+        correctTotal = 0;
+        incorrectTotal = 0;
+
+        shuffle(questions);
+        setAnswers();
+
+        hideEndScreen();
+        hideStartScreen();
+        showGameScreen();
+        updateRemainingTime();
+
+        if (!timer) {
+            startTimer();
+        }
+
+        pickRandomQuestion();
+
+    }
+
+    function endGame() {
+
+        hideGameScreen();
+        showEndScreen();
+        updateFinalScore();
+
+    }
+
+    function startTimer() {
+
+        timer = setInterval(function(){
+            timeRemaining = timeRemaining - 1;
+            updateRemainingTime();
+            if (timeRemaining == 0) {
+                endGame();
+            }
+        },1000);
+
+    }
+
+    function updateRemainingTime() {
+        document.getElementById("timeRemaining").innerHTML = "Timer: " + timeRemaining;
+    }
+
+    function updateFinalScore() {
+        var total = correctTotal + incorrectTotal;
+        document.getElementById("finalScore").innerHTML = "You scored " + correctTotal + " out of " + total + ".";
+    }
+
+    function setAnswers() {
+
+        uniqueAnswers = [];
+
+        var uniqueAnswerIndex = 0;
+
+        for (i = 0; i < questions.length; i++) {
+            if (uniqueAnswers.indexOf(questions[i].answer) == -1 && uniqueAnswerIndex < numberOfQuestions) {
+                uniqueAnswers.push(questions[i].answer);
+                document.getElementById(uniqueAnswerIndex).innerHTML = questions[i].answer;
+                document.getElementById(uniqueAnswerIndex).setAttribute("questionid", i);
+                document.getElementById(uniqueAnswerIndex).onclick = function(){checkAnswer(event)};
+                uniqueAnswerIndex++;
+            }
+        }
+
+    }
+
+    function pickRandomQuestion() {
+
+        var newQuestionId = currentQuestionId;
+
+        while (currentQuestionId == newQuestionId || !uniqueAnswers.includes(questions[newQuestionId].answer)) {
+            newQuestionId = Math.floor(Math.random()*questions.length);
+        }
+
+        currentQuestionId = newQuestionId;
+        currentQuestion = questions[currentQuestionId];
+
+        document.getElementById("question").innerHTML = currentQuestion.question;
+    }
+
+    function checkAnswer(event) {
+        questionId = event.target.getAttribute("questionid");
+
+        //alert(questionId + "," + currentQuestionId);
+
+        providedAnswer = questions[questionId].answer;
+        correctAnswer = questions[currentQuestionId].answer;
+
+        isCorrect = providedAnswer == correctAnswer;
+
+        if (isCorrect) {
+            correctTotal++;
+            flashColour(event.target, "green");
+        } else {
+            incorrectTotal++;
+            flashColour(event.target, "red");
+        }
+
+        //alert(providedAnswer + "," + correctAnswer + "," + isCorrect);
+
+        updateScore();
+
+        pickRandomQuestion();
+    }
+
+    function flashColour(element, colour) {
+        var existingColour = element.style.background;
+        element.style.background = colour;
+         setTimeout(function(){
+            element.style.background = existingColour;
+        },300);
+    }
+
+    function updateScore() {
+        var total = correctTotal + incorrectTotal;
+        document.getElementById("score").innerHTML = "Score: " + correctTotal + "/" + total;
+    }
+
+    function shuffle(array) {
+        array.sort(() => Math.random() - 0.5);
+    }
+
+</script>
+
+<body>
+
+<div id="startScreen">
+    <button class="grid-item" onclick="initialiseGame();">Start Game</button>
+</div>
+
+<div id="gameScreen">
+
+<div class="container">
+<p id="question">-</p>
+</div>
+
+<div class="grid-container">
+    <div id="0" class="grid-item"></div>
+    <div id="1" class="grid-item"></div>
+    <div id="2" class="grid-item"></div>
+    <div id="3" class="grid-item"></div>
+    <div id="4" class="grid-item"></div>
+    <div id="5" class="grid-item"></div>
+    <div id="6" class="grid-item"></div>
+    <div id="7" class="grid-item"></div>
+    <div id="8" class="grid-item"></div>
+    <div id="9" class="grid-item"></div>
+    <div id="10" class="grid-item"></div>
+    <div id="11" class="grid-item"></div>
+</div>
+
+<div class="container">
+<p id="timeRemaining">Timer:</p>
+<p id="score">Score:</p>
+</div>
+</div>
+
+<div id="endScreen">
+    <p id="finalScore"></p>
+    <button class="grid-item" onclick="initialiseGame();">Start Game</button>
+</div>
+
+
+</body>
+</html>
