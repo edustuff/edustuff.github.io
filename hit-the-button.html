@@ -32,8 +32,10 @@ body {
 }
 
 button {
-  margin-top: auto;
-  margin-button: auto;
+  margin-top: 20px;
+  margin-button: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -57,7 +59,7 @@ button {
   margin-bottom: 0px;
 }
 
-#gameScreen, #endScreen {
+#gameScreen {
     position: absolute;
     top: 0px;
     width: 100%;
@@ -95,7 +97,7 @@ button {
 
     var timer;
 
-    var questions = getPercentageQuestions();
+    var questions = [];
     var uniqueAnswers = [];
 
 
@@ -104,6 +106,17 @@ button {
     var questions2 = [
       // questions1 reversed
     ];
+
+    function inverseQuestions(originalQuestions) {
+
+        var inversedQuestions = [];
+
+        for (i = 0; i < originalQuestions.length; i++) {
+            inversedQuestions.push({question : originalQuestions[i].answer, answer: originalQuestions[i].question});
+        }
+
+        return inversedQuestions;
+    }
 
 
     function showStartScreen() {
@@ -122,15 +135,9 @@ button {
         document.getElementById("gameScreen").style.visibility= 'hidden' ;
     }
 
-        function showEndScreen() {
-        document.getElementById("endScreen").style.visibility= 'visible' ;
-    }
+    function initialiseGame(questionData) {
 
-    function hideEndScreen() {
-        document.getElementById("endScreen").style.visibility= 'hidden' ;
-    }
-
-    function initialiseGame() {
+        questions = questionData;
 
         totalScore = 0;
         timeRemaining = 60;
@@ -140,7 +147,6 @@ button {
         shuffle(questions);
         setAnswers();
 
-        hideEndScreen();
         hideStartScreen();
         showGameScreen();
         updateRemainingTime();
@@ -156,7 +162,7 @@ button {
     function endGame() {
 
         hideGameScreen();
-        showEndScreen();
+        showStartScreen();
         updateFinalScore();
 
     }
@@ -185,12 +191,16 @@ button {
     function setAnswers() {
 
         uniqueAnswers = [];
+        uniqueQuestions = [];
 
         var uniqueAnswerIndex = 0;
 
         for (i = 0; i < questions.length; i++) {
-            if (uniqueAnswers.indexOf(questions[i].answer) == -1 && uniqueAnswerIndex < numberOfQuestions) {
+            if (uniqueAnswers.indexOf(questions[i].answer) == -1 && uniqueQuestions.indexOf(questions[i].question) == -1 && uniqueAnswerIndex < numberOfQuestions) {
+
                 uniqueAnswers.push(questions[i].answer);
+                uniqueQuestions.push(questions[i].question);
+
                 document.getElementById(uniqueAnswerIndex).innerHTML = questions[i].answer;
                 document.getElementById(uniqueAnswerIndex).setAttribute("questionid", i);
                 document.getElementById(uniqueAnswerIndex).onclick = function(){checkAnswer(event)};
@@ -270,7 +280,11 @@ button {
 <body>
 
 <div id="startScreen">
-    <button class="grid-item" onclick="initialiseGame();">Start Game</button>
+    <p id="finalScore"></p>
+    <button class="grid-item" onclick="initialiseGame(getIndiciesQuestions());">Squares, Cubes and Other Indices 1</button>
+    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getIndiciesQuestions()));">Squares, Cubes and Other Indices 2</button>
+    <button class="grid-item" onclick="initialiseGame(getPercentageQuestions());">Percentages 1</button>
+    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getPercentageQuestions()));">Percentages 2</button>
 </div>
 
 <div id="gameScreen">
@@ -298,11 +312,6 @@ button {
 <p id="timeRemaining">Timer:</p>
 <p id="score">Score:</p>
 </div>
-</div>
-
-<div id="endScreen">
-    <p id="finalScore"></p>
-    <button class="grid-item" onclick="initialiseGame();">Start Game</button>
 </div>
 
 
