@@ -100,19 +100,16 @@ button {
     var questions = [];
     var uniqueAnswers = [];
 
+    var maxType = 1;
+    var curQuestionType = 1;
 
-
-
-    var questions2 = [
-      // questions1 reversed
-    ];
 
     function inverseQuestions(originalQuestions) {
 
         var inversedQuestions = [];
 
         for (i = 0; i < originalQuestions.length; i++) {
-            inversedQuestions.push({question : originalQuestions[i].answer, answer: originalQuestions[i].question});
+            inversedQuestions.push({type : originalQuestions[i].type, question : originalQuestions[i].answer, answer: originalQuestions[i].question});
         }
 
         return inversedQuestions;
@@ -138,11 +135,14 @@ button {
     function initialiseGame(questionData) {
 
         questions = questionData;
+        uniqueAnswers = [];
 
         totalScore = 0;
         timeRemaining = 60;
         correctTotal = 0;
         incorrectTotal = 0;
+        maxType = 1;
+        curQuestionType = 1;
 
         shuffle(questions);
         setAnswers();
@@ -195,8 +195,21 @@ button {
 
         var uniqueAnswerIndex = 0;
 
+        maxType = 1;
+
         for (i = 0; i < questions.length; i++) {
-            if (uniqueAnswers.indexOf(questions[i].answer) == -1 && uniqueQuestions.indexOf(questions[i].question) == -1 && uniqueAnswerIndex < numberOfQuestions) {
+            if (questions[i].type > maxType) {
+                maxType = questions[i].type;
+            }
+        }
+
+        var curType = 1;
+
+        var i=0;
+
+        while (uniqueAnswerIndex < numberOfQuestions) {
+
+            if (questions[i].type == curType && uniqueAnswers.indexOf(questions[i].answer) == -1 && uniqueQuestions.indexOf(questions[i].question) == -1) {
 
                 uniqueAnswers.push(questions[i].answer);
                 uniqueQuestions.push(questions[i].question);
@@ -204,18 +217,38 @@ button {
                 document.getElementById(uniqueAnswerIndex).innerHTML = questions[i].answer;
                 document.getElementById(uniqueAnswerIndex).setAttribute("questionid", i);
                 document.getElementById(uniqueAnswerIndex).onclick = function(){checkAnswer(event)};
+
                 uniqueAnswerIndex++;
+
+                curType++;
+
+                if (curType > maxType) {
+                    curType = 1;
+                }
+
+            }
+
+            i++;
+            if (i == questions.length) {
+                i = 0;
             }
         }
 
     }
 
+
+
     function pickRandomQuestion() {
 
         var newQuestionId = currentQuestionId;
 
-        while (currentQuestionId == newQuestionId || !uniqueAnswers.includes(questions[newQuestionId].answer)) {
+        while (questions[newQuestionId].type != curQuestionType || currentQuestionId == newQuestionId || !uniqueAnswers.includes(questions[newQuestionId].answer)) {
             newQuestionId = Math.floor(Math.random()*questions.length);
+        }
+
+        curQuestionType++;
+        if (curQuestionType > maxType) {
+            curQuestionType = 1;
         }
 
         currentQuestionId = newQuestionId;
