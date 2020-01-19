@@ -92,6 +92,10 @@ button {
     var timeRemaining = 60;
     var correctTotal = 0;
     var incorrectTotal = 0;
+
+    var maxType = 1;
+    var curQuestionType = 1;
+
     var currentQuestionId = 0;
     var numberOfQuestions = 12;
 
@@ -99,9 +103,6 @@ button {
 
     var questions = [];
     var uniqueAnswers = [];
-
-    var maxType = 1;
-    var curQuestionType = 1;
 
 
     function inverseQuestions(originalQuestions) {
@@ -135,6 +136,7 @@ button {
     function initialiseGame(questionData) {
 
         questions = questionData;
+
         uniqueAnswers = [];
 
         totalScore = 0;
@@ -144,12 +146,16 @@ button {
         maxType = 1;
         curQuestionType = 1;
 
+        currentQuestionId = 0;
+
         shuffle(questions);
         setAnswers();
 
         hideStartScreen();
         showGameScreen();
         updateRemainingTime();
+        updateScore();
+
 
         if (!timer) {
             startTimer();
