@@ -59,6 +59,15 @@ button {
   margin-bottom: 0px;
 }
 
+#prompt {
+  padding: 20px;
+  color: red;
+  font-size: 36px;
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
 #gameScreen {
     position: absolute;
     top: 0px;
@@ -85,6 +94,7 @@ button {
 
 <script src="questions/indicies.js"></script>
 <script src="questions/percentages.js"></script>
+<script src="questions/prime.js"></script>
 
 <script>
 
@@ -133,7 +143,7 @@ button {
         document.getElementById("gameScreen").style.visibility= 'hidden' ;
     }
 
-    function initialiseGame(questionData) {
+    function initialiseGame(questionData, numOfQuestions, numberOfColumns) {
 
         questions = questionData;
 
@@ -147,6 +157,9 @@ button {
         curQuestionType = 1;
 
         currentQuestionId = 0;
+
+        numberOfQuestions = numOfQuestions;
+        resizeGrid(numberOfQuestions, numberOfColumns);
 
         shuffle(questions);
         setAnswers();
@@ -275,8 +288,15 @@ button {
 
         if (isCorrect) {
             correctTotal++;
+            document.getElementById("prompt").innerHTML = "";
             flashColour(event.target, "green");
         } else {
+            if (questions[currentQuestionId].prompt) {
+                document.getElementById("prompt").innerHTML = questions[currentQuestionId].prompt;
+            } else {
+                document.getElementById("prompt").innerHTML = questions[currentQuestionId].question + " = " + questions[currentQuestionId].answer;
+            }
+
             incorrectTotal++;
             flashColour(event.target, "red");
         }
@@ -314,16 +334,41 @@ button {
       }
     }
 
+    function resizeGrid(size, columnsCount) {
+        var cells = document.querySelectorAll("#grid > div");
+        var i;
+        for (i = 0; i < cells.length; i++) {
+          cells[i].remove();
+        }
+
+        for (i = 0; i < size; i++) {
+          var newCell = document.createElement("DIV");
+          newCell.setAttribute("id", i);
+          newCell.setAttribute("class", "grid-item");
+          document.getElementById("grid").appendChild(newCell);
+        }
+
+        var autoColumns = "";
+
+        for (i = 0; i<columnsCount; i++) {
+            autoColumns = autoColumns + "auto ";
+        }
+
+        document.getElementById("grid").style.gridTemplateColumns = autoColumns;
+
+    }
+
 </script>
 
 <body>
 
 <div id="startScreen">
     <p id="finalScore"></p>
-    <button class="grid-item" onclick="initialiseGame(getIndiciesQuestions());">Squares, Cubes and Other Indices 1</button>
-    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getIndiciesQuestions()));">Squares, Cubes and Other Indices 2</button>
-    <button class="grid-item" onclick="initialiseGame(getPercentageQuestions());">Percentages 1</button>
-    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getPercentageQuestions()));">Percentages 2</button>
+    <button class="grid-item" onclick="initialiseGame(getIndiciesQuestions(),12,4);">Squares, Cubes and Other Indices 1</button>
+    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getIndiciesQuestions()),12,4);">Squares, Cubes and Other Indices 2</button>
+    <button class="grid-item" onclick="initialiseGame(getPercentageQuestions(),12,4);">Percentages 1</button>
+    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getPercentageQuestions()),12,4);">Percentages 2</button>
+    <button class="grid-item" onclick="initialiseGame(getPrimeQuestions(),2,2);">Prime numbers</button>
 </div>
 
 <div id="gameScreen">
@@ -332,7 +377,7 @@ button {
 <p id="question">-</p>
 </div>
 
-<div class="grid-container">
+<div id="grid" class="grid-container">
     <div id="0" class="grid-item"></div>
     <div id="1" class="grid-item"></div>
     <div id="2" class="grid-item"></div>
@@ -348,6 +393,7 @@ button {
 </div>
 
 <div class="container">
+<p id="prompt"></p>
 <p id="timeRemaining">Timer:</p>
 <p id="score">Score:</p>
 </div>
