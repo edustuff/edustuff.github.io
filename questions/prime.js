@@ -2,7 +2,7 @@ function getPrimeQuestions() {
 
     var questions = [];
 
-    for (i = 1; i <= 2; i++) {
+    for (i = 1; i <= 50; i++) {
         if (i == 1) {
             questions.push({type : 1, question : i + " is a prime number?", answer: false, prompt: "The definition of a <B>prime number</B> is a positive integer that has exactly two positive divisors. However, <B>1</B> only has <B>one</B> positive divisor (1 itself), so it is <B>not</B> prime."});
         }
