@@ -166,9 +166,16 @@ button {
 
         hideStartScreen();
         showGameScreen();
-        updateRemainingTime();
+
+        if (document.getElementById("timer").checked) {
+            updateRemainingTime();
+        } else {
+            updateQuestionCount();
+        }
+
         updateScore();
 
+        document.getElementById("prompt").innerHTML = "";
 
         if (!timer) {
             startTimer();
@@ -189,17 +196,31 @@ button {
     function startTimer() {
 
         timer = setInterval(function(){
-            timeRemaining = timeRemaining - 1;
-            updateRemainingTime();
-            if (timeRemaining == 0) {
-                endGame();
+            if (document.getElementById("timer").checked) {
+                timeRemaining = timeRemaining - 1;
+                updateRemainingTime();
+                if (timeRemaining == 0) {
+                    endGame();
+                }
+            } else {
+                updateQuestionCount();
+                var total = correctTotal + incorrectTotal;
+                if (total >= 10) {
+                    endGame();
+                }
             }
         },1000);
 
     }
 
     function updateRemainingTime() {
+
         document.getElementById("timeRemaining").innerHTML = "Timer: " + timeRemaining;
+    }
+
+    function updateQuestionCount() {
+        var total = correctTotal + incorrectTotal;
+        document.getElementById("timeRemaining").innerHTML = "Question: " + (total + 1);
     }
 
     function updateFinalScore() {
@@ -364,6 +385,8 @@ button {
 
 <div id="startScreen">
     <p id="finalScore"></p>
+    <input type="radio" name="gameType" id="timer"> Timer<br>
+    <input type="radio" name="gameType" id="count" checked> Counter<br>
     <button class="grid-item" onclick="initialiseGame(getIndiciesQuestions(),12,4);">Squares, Cubes and Other Powers 1</button>
     <button class="grid-item" onclick="initialiseGame(inverseQuestions(getIndiciesQuestions()),12,4);">Squares, Cubes and Other Powers 2</button>
     <button class="grid-item" onclick="initialiseGame(getPercentageQuestions(),12,4);">Percentages 1</button>
