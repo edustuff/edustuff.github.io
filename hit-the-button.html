@@ -50,6 +50,15 @@ button {
   margin-bottom: 0px;
 }
 
+.questionMinor {
+  padding: 20px;
+  color: #ff3;
+  font-size: 24px;
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
 #timeRemaining,#score,#finalScore {
   padding: 20px;
   color: #fff;
@@ -95,6 +104,7 @@ button {
 <script src="questions/indicies.js"></script>
 <script src="questions/percentages.js"></script>
 <script src="questions/prime.js"></script>
+<script src="questions/sequences.js"></script>
 
 <script>
 
@@ -108,6 +118,8 @@ button {
 
     var currentQuestionId = 0;
     var numberOfQuestions = 12;
+
+    var maxQuestionCount = 10;
 
     var timer;
 
@@ -143,9 +155,11 @@ button {
         document.getElementById("gameScreen").style.visibility= 'hidden' ;
     }
 
-    function initialiseGame(questionData, numOfQuestions, numberOfColumns) {
+    function initialiseGame(questionData, numOfQuestions, numberOfColumns, maxQuestCount) {
 
         questions = questionData;
+
+        maxQuestionCount = maxQuestCount;
 
         uniqueAnswers = [];
 
@@ -205,7 +219,7 @@ button {
             } else {
                 updateQuestionCount();
                 var total = correctTotal + incorrectTotal;
-                if (total >= 10) {
+                if (total >= maxQuestionCount) {
                     endGame();
                 }
             }
@@ -387,11 +401,12 @@ button {
     <p id="finalScore"></p>
     <input type="radio" name="gameType" id="timer"> Timer<br>
     <input type="radio" name="gameType" id="count" checked> Counter<br>
-    <button class="grid-item" onclick="initialiseGame(getIndiciesQuestions(),12,4);">Squares, Cubes and Other Powers 1</button>
-    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getIndiciesQuestions()),12,4);">Squares, Cubes and Other Powers 2</button>
-    <button class="grid-item" onclick="initialiseGame(getPercentageQuestions(),12,4);">Percentages 1</button>
-    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getPercentageQuestions()),12,4);">Percentages 2</button>
-    <button class="grid-item" onclick="initialiseGame(getPrimeQuestions(),2,2);">Prime numbers</button>
+    <button class="grid-item" onclick="initialiseGame(getIndiciesQuestions(),12,4,10);">Squares, Cubes and Other Powers 1</button>
+    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getIndiciesQuestions()),12,4,10);">Squares, Cubes and Other Powers 2</button>
+    <button class="grid-item" onclick="initialiseGame(getPercentageQuestions(),12,4,10);">Percentages 1</button>
+    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getPercentageQuestions()),12,4,10);">Percentages 2</button>
+    <button class="grid-item" onclick="initialiseGame(getPrimeQuestions(),2,2,15);">Prime numbers</button>
+    <button class="grid-item" onclick="initialiseGame(getSequenceQuestions(),12,4,10);">Sequences</button>
 </div>
 
 <div id="gameScreen">
