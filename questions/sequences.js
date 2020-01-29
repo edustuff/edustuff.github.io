@@ -2,24 +2,36 @@ function add(base, position, amount) {
     return base + (position * amount);
 }
 
-function subtract(base, position, amount) {
-    return base - (position * amount);
+function times10(base, position, amount) {
+    return base * (Math.pow(10, position));
 }
+
+function times20(base, position, amount) {
+    return base * (Math.pow(20, position));
+}
+
+
 
 function getSequenceQuestions() {
 
     var questions = [];
 
-    createSequence(1, questions, add);
-    createSequence(2, questions, subtract);
+    createSequence(1, 0, 100, 10, questions, add, false);
+    createSequence(2, 0, 100, 10, questions, add, true);
+    createSequence(3, 0, 100, 10, questions, times10, false);
+    createSequence(4, 0, 100, 10, questions, times10, true);
+    createSequence(5, 1, 5, 2, questions, times20, false);
+    createSequence(6, 1, 5, 2, questions, times20, true);
+    createSequence(7, -50, 0, 10, questions, add, false);
+    createSequence(8, -50, 0, 10, questions, add, true);
 
     return questions;
 
 }
 
-function createSequence(typeId, questions, transformation) {
+function createSequence(typeId, minBase, maxBase, stepSize, questions, transformation, reverse) {
 
-    for (i = 1; i <= 100; i=i+Math.floor(Math.random() * 10)) {
+    for (i = minBase; i <= maxBase; i=i+Math.floor(Math.random() * stepSize)) {
 
         var element1 = i;
 
@@ -42,9 +54,17 @@ function createSequence(typeId, questions, transformation) {
 
             if (j == missingTermPosition) {
                 answer = term;
-                sequence = sequence + spacer + "....";
+                if (reverse) {
+                    sequence = "...." + spacer + sequence;
+                } else {
+                    sequence = sequence + spacer + "....";
+                }
             } else {
-                sequence = sequence + spacer + term;
+                if (reverse) {
+                    sequence = term + spacer + sequence;
+                } else {
+                    sequence = sequence + spacer + term;
+                }
             }
         }
 
