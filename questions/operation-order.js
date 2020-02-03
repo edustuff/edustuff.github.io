@@ -29,14 +29,14 @@ function getOperationOrderQuestions() {
 
             var numberPattern = mathPattern;
 
-            while (answer != Math.round(answer) || !isFinite(answer)) {
+            while (answer != Math.round(answer) || !isFinite(answer) || answer == 0 || answer > 144 || answer < -144) {
 
                 numberPattern = mathPattern;
 
-                numberPattern = numberPattern.replace("X1", Math.floor(Math.random() * 13));
-                numberPattern = numberPattern.replace("X2", Math.floor(Math.random() * 13));
-                numberPattern = numberPattern.replace("X3", Math.floor(Math.random() * 13));
-                numberPattern = numberPattern.replace("X4", Math.floor(Math.random() * 13));
+                numberPattern = numberPattern.replace("X1", number());
+                numberPattern = numberPattern.replace("X2", number());
+                numberPattern = numberPattern.replace("X3", number());
+                numberPattern = numberPattern.replace("X4", number());
 
                 answer = calculateAnswer(numberPattern);
 
@@ -51,9 +51,21 @@ function getOperationOrderQuestions() {
 
 }
 
+function number() {
+
+    var num = Math.floor(Math.random() * 13);
+
+    if (Math.floor(Math.random() * 2) == 0 && num <= 3 && num > 0) {
+        return num + "<sup>2</sup>";
+    } else {
+        return num;
+    }
+
+}
+
 function calculateAnswer(question) {
 
-    var modifiedQuestion = question.split("&times;").join("*").split("&divide;").join("/");
+    var modifiedQuestion = question.split("&times;").join("*").split("&divide;").join("/").split("<sup>2</sup>").join("^2");
 
     console.log(modifiedQuestion);
 
