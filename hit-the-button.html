@@ -109,6 +109,8 @@ button {
 <script src="questions/prime.js"></script>
 <script src="questions/sequences.js"></script>
 <script src="questions/operation-order.js"></script>
+<script src="questions/conversions.js"></script>
+<script src="questions/averages.js"></script>
 
 <script>
 
@@ -161,6 +163,8 @@ button {
 
     function initialiseGame(questionData, numOfQuestions, numberOfColumns, maxQuestCount) {
 
+        console.log("Initialising Game");
+
         window.scrollTo(0, 0);
 
         questions = questionData;
@@ -182,7 +186,12 @@ button {
         resizeGrid(numberOfQuestions, numberOfColumns);
 
         shuffle(questions);
+
+        console.log("Questions shuffled");
+
         setAnswers();
+
+        console.log("Questions set");
 
         hideStartScreen();
         showGameScreen();
@@ -263,11 +272,19 @@ button {
             }
         }
 
+        console.log("Question types = " + maxType);
+
+        console.log("Target question count = " + numberOfQuestions);
+
         var curType = 1;
 
         var i=0;
 
-        while (uniqueAnswerIndex < numberOfQuestions) {
+        var attempt = 0;
+
+        while (uniqueAnswerIndex < numberOfQuestions && attempt < 1000) {
+
+            attempt = attempt + 1;
 
             if (questions[i].type == curType && uniqueAnswers.indexOf(questions[i].answer) == -1 && uniqueQuestions.indexOf(questions[i].question) == -1) {
 
@@ -292,6 +309,10 @@ button {
             if (i == questions.length) {
                 i = 0;
             }
+        }
+
+        if (uniqueAnswerIndex < numberOfQuestions) {
+            alert ("Unable to reach target question count");
         }
 
     }
@@ -416,6 +437,8 @@ button {
     <button class="grid-item" onclick="initialiseGame(getPrimeQuestions(),2,2,15);">Prime numbers</button>
     <button class="grid-item" onclick="initialiseGame(getSequenceQuestions(),12,4,10);">Sequences</button>
     <button class="grid-item" onclick="initialiseGame(getOperationOrderQuestions(),12,4,10);">BIDMAS</button>
+    <button class="grid-item" onclick="initialiseGame(getConversionQuestions(),12,4,10);">Unit conversions</button>
+    <button class="grid-item" onclick="initialiseGame(getMeanAverageQuestions(),8,4,10);">Averages</button>
 </div>
 
 <div id="gameScreen">

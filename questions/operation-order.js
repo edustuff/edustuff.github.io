@@ -11,6 +11,8 @@ function getOperationOrderQuestions() {
     "X1 #1 (X2 #2 X3) #3 X4",
     "X1 #1 X2 #2 (X3 #3 X4)",
     "(X1 #1 X2) #2 (X3 #3 X4)",
+    "(X1 #1 X2 #2 X3) #3 X4",
+    "X1 #1 (X2 #2 X3 #3 X4)"
     ];
 
     var symbols = ["+","-","&times;","&divide;"];
@@ -29,16 +31,30 @@ function getOperationOrderQuestions() {
 
             var numberPattern = mathPattern;
 
-            while (answer != Math.round(answer) || !isFinite(answer) || answer == 0 || answer > 144 || answer < -144) {
+            var numberOrder = false;
+
+            while (!numberOrder || answer != Math.round(answer) || !isFinite(answer) || answer == 0 || answer > 144 || answer < -144) {
 
                 numberPattern = mathPattern;
 
-                numberPattern = numberPattern.replace("X1", number());
-                numberPattern = numberPattern.replace("X2", number());
-                numberPattern = numberPattern.replace("X3", number());
-                numberPattern = numberPattern.replace("X4", number());
+                num1 = number();
+                num2 = number();
+                num3 = number();
+                num4 = number();
 
-                answer = calculateAnswer(numberPattern);
+                //console.log(num1, num2, num3, num4);
+                //console.log(num1 > num2 , num2 > num3 , num3 > num4);
+//                numberOrder = (num1 > num2 && num2 > num3 && num3 > num4);
+                numberOrder = true;
+
+                if (numberOrder) {
+                    numberPattern = numberPattern.replace("X1", num1);
+                    numberPattern = numberPattern.replace("X2", num2);
+                    numberPattern = numberPattern.replace("X3", num3);
+                    numberPattern = numberPattern.replace("X4", num4);
+
+                    answer = calculateAnswer(numberPattern);
+                }
 
             }
 
@@ -63,11 +79,33 @@ function number() {
 
 }
 
+function hasExclusions(question) {
+
+  var segment = question.match(/\(.+\)/g);
+
+  if (!segment) return false;
+
+  //console.log(segment);
+
+  var segmentAnswer = math.evaluate(segment);
+
+  //console.log(segmentAnswer);
+
+  if (segmentAnswer <= 0) {return true;} else {return false;}
+
+}
+
 function calculateAnswer(question) {
 
     var modifiedQuestion = question.split("&times;").join("*").split("&divide;").join("/").split("<sup>2</sup>").join("^2");
 
-    console.log(modifiedQuestion);
+    //console.log(modifiedQuestion);
+
+    var t = hasExclusions(modifiedQuestion);
+
+    console.log(t);
+
+    if (t) return 999;
 
     var answer = math.evaluate(modifiedQuestion);
 
