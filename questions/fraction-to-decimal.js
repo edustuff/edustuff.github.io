@@ -1,4 +1,4 @@
-function getPercentageToDecimal() {
+function getFractionsToDecimal() {
 
     var questions = [];
 
