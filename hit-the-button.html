@@ -112,6 +112,7 @@ button {
 <script src="questions/conversions.js"></script>
 <script src="questions/averages.js"></script>
 <script src="questions/fraction-to-decimal.js"></script>
+<script src="questions/fraction-addition.js"></script>
 
 <script>
 
@@ -342,7 +343,15 @@ button {
     }
 
     function checkAnswer(event) {
-        questionId = event.target.getAttribute("questionid");
+
+        var element = event.target;
+
+        questionId = element.getAttribute("questionid");
+
+        while (questionId == undefined) {
+            element = element.parentElement;
+            questionId = element.getAttribute("questionid");
+        }
 
         //alert(questionId + "," + currentQuestionId);
 
@@ -354,7 +363,7 @@ button {
         if (isCorrect) {
             correctTotal++;
             document.getElementById("prompt").innerHTML = "";
-            flashColour(event.target, "green");
+            flashColour(element, "green");
         } else {
             if (questions[currentQuestionId].prompt) {
                 document.getElementById("prompt").innerHTML = questions[currentQuestionId].prompt;
@@ -363,7 +372,7 @@ button {
             }
 
             incorrectTotal++;
-            flashColour(event.target, "red");
+            flashColour(element, "red");
         }
 
         //alert(providedAnswer + "," + correctAnswer + "," + isCorrect);
@@ -440,7 +449,8 @@ button {
     <button class="grid-item" onclick="initialiseGame(getOperationOrderQuestions(),12,4,10);">BIDMAS</button>
     <button class="grid-item" onclick="initialiseGame(getConversionQuestions(),12,4,10);">Unit conversions</button>
     <button class="grid-item" onclick="initialiseGame(getMeanAverageQuestions(),8,4,10);">Averages</button>
-    <button class="grid-item" onclick="initialiseGame(getFractionsToDecimal(),9,3,10);">Fractions to Decimals</button>
+    <button class="grid-item" onclick="initialiseGame(getFractionsToDecimal(),9,3,10);">Fractions to decimals</button>
+    <button class="grid-item" onclick="initialiseGame(getFractionAdditions(),12,4,10);">Fraction additions and subtractions</button>
 </div>
 
 <div id="gameScreen">
