@@ -102,8 +102,11 @@ button {
 
 </head>
 
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.0/math.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.0/math.min.js"></script>-->
+
+<script src="libs/tex-mml-chtml.js"></script>
+<script src="libs/math.min.js"></script>
 
 <script src="questions/indicies.js"></script>
 <script src="questions/percentages.js"></script>
@@ -114,6 +117,7 @@ button {
 <script src="questions/averages.js"></script>
 <script src="questions/fraction-to-decimal.js"></script>
 <script src="questions/fraction-addition.js"></script>
+<script src="questions/fraction-simplify.js"></script>
 
 <script>
 
@@ -452,6 +456,7 @@ button {
     <button class="grid-item" onclick="initialiseGame(getMeanAverageQuestions(),8,4,10);">Averages</button>
     <button class="grid-item" onclick="initialiseGame(getFractionsToDecimal(),9,3,10);">Fractions to decimals</button>
     <button class="grid-item" onclick="initialiseGame(getFractionAdditions(),12,4,10);">Fraction additions, subtractions, multiplications and divisions</button>
+    <button class="grid-item" onclick="initialiseGame(getFractionSimplifications(),9,3,10);">Simplify fractions</button>
 </div>
 
 <div id="gameScreen">
