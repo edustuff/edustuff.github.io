@@ -117,6 +117,7 @@ button {
 <script src="questions/fraction-to-decimal.js"></script>
 <script src="questions/fraction-addition.js"></script>
 <script src="questions/fraction-simplify.js"></script>
+<script src="questions/biggest-smallest.js"></script>
 
 <script>
 
@@ -137,6 +138,7 @@ button {
 
     var questions = [];
     var uniqueAnswers = [];
+    var questionsAsked = [];
 
 
     function inverseQuestions(originalQuestions) {
@@ -178,6 +180,7 @@ button {
         maxQuestionCount = maxQuestCount;
 
         uniqueAnswers = [];
+        questionsAsked = [];
 
         totalScore = 0;
         timeRemaining = 60;
@@ -202,6 +205,8 @@ button {
         hideStartScreen();
         showGameScreen();
 
+        console.log("Game screen displayed");
+
         if (document.getElementById("timer").checked) {
             updateRemainingTime();
         } else {
@@ -210,6 +215,8 @@ button {
 
         updateScore();
 
+        console.log("Score, timer and question count reset");
+
         document.getElementById("prompt").innerHTML = "";
 
         if (!timer) {
@@ -217,6 +224,8 @@ button {
         }
 
         pickRandomQuestion();
+
+        console.log("First question selected");
 
     }
 
@@ -319,6 +328,8 @@ button {
 
         if (uniqueAnswerIndex < numberOfQuestions) {
             alert ("Unable to reach target question count");
+            console.log(uniqueAnswerIndex + " out of " + numberOfQuestions);
+            console.log(questions);
         }
 
     }
@@ -329,9 +340,11 @@ button {
 
         var newQuestionId = currentQuestionId;
 
-        while (questions[newQuestionId].type != curQuestionType || currentQuestionId == newQuestionId || !uniqueAnswers.includes(questions[newQuestionId].answer)) {
+        while (questions[newQuestionId].type != curQuestionType || currentQuestionId == newQuestionId || (!uniqueAnswers.includes(questions[newQuestionId].answer) && !questions[newQuestionId].answers) || questionsAsked.includes(newQuestionId)) {
             newQuestionId = Math.floor(Math.random()*questions.length);
         }
+
+        questionsAsked.push(newQuestionId);
 
         curQuestionType++;
         if (curQuestionType > maxType) {
@@ -342,6 +355,15 @@ button {
         currentQuestion = questions[currentQuestionId];
 
         document.getElementById("question").innerHTML = currentQuestion.question;
+
+        if (currentQuestion.answers && currentQuestion.answers.length > 0) {
+            for (var i=0; i<currentQuestion.answers.length; i++) {
+                document.getElementById(i).innerHTML = currentQuestion.answers[i];
+                if (currentQuestion.answers[i] == currentQuestion.answer) {
+                    document.getElementById(i).setAttribute("questionid", currentQuestionId);
+                }
+            }
+        }
 
         MathJax.typeset();
     }
@@ -444,8 +466,8 @@ button {
     <p id="finalScore"></p>
     <input type="radio" name="gameType" id="timer"> Timer<br>
     <input type="radio" name="gameType" id="count" checked> Counter<br>
-    <button class="grid-item" onclick="initialiseGame(getIndiciesQuestions(),12,4,10);">Squares, Cubes and Other Powers 1</button>
-    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getIndiciesQuestions()),12,4,10);">Squares, Cubes and Other Powers 2</button>
+    <button class="grid-item" onclick="initialiseGame(getIndiciesQuestions(),12,4,10);">Squares, cubes and other powers 1</button>
+    <button class="grid-item" onclick="initialiseGame(inverseQuestions(getIndiciesQuestions()),12,4,10);">Squares, cubes and other powers 2</button>
     <button class="grid-item" onclick="initialiseGame(getPercentageQuestions(),12,4,10);">Percentages 1</button>
     <button class="grid-item" onclick="initialiseGame(inverseQuestions(getPercentageQuestions()),12,4,10);">Percentages 2</button>
     <button class="grid-item" onclick="initialiseGame(getPrimeQuestions(),2,2,20);">Prime numbers</button>
@@ -456,6 +478,7 @@ button {
     <button class="grid-item" onclick="initialiseGame(getFractionsToDecimal(),9,3,10);">Fractions to decimals</button>
     <button class="grid-item" onclick="initialiseGame(getFractionAdditions(),12,4,10);">Fraction additions, subtractions, multiplications and divisions</button>
     <button class="grid-item" onclick="initialiseGame(getFractionSimplifications(),9,3,10);">Simplify fractions</button>
+    <button class="grid-item" onclick="initialiseGame(getBiggestSmallest(),5,5,10);">Biggest and smallest</button>
 </div>
 
 <div id="gameScreen">
