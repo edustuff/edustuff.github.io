@@ -131,7 +131,7 @@ function fractions1() {
 
             }
 
-            questions.push({type : questionTypeId, question : "What fraction is the <B>" + questionType + "</B>?<p class='questionMinor'>" + (numbers + "").split(",").join(" , ") + "</p>", answer: answer, answers: numbers});
+            questions.push({type : questionTypeId, question : "What fraction is the <B>" + questionType + "</B>?<p class='hidden'>" + (numbers + "").split(",").join(" , ") + "</p>", answer: answer, answers: numbers});
         }
 
     }
@@ -197,7 +197,7 @@ function getDecimals() {
 
         }
 
-        questions.push({type : questionTypeId, question : "What number is the <B>" + questionType + "</B>?<p class='questionMinor'>" + (numbers + "").split(",").join(" , ") + "</p>", answer: answer, answers: numbers});
+        questions.push({type : questionTypeId, question : "What number is the <B>" + questionType + "</B>?<p class='hidden'>" + (numbers + "").split(",").join(" , ") + "</p>", answer: answer, answers: numbers});
     }
 
     return questions;
