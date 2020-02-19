@@ -10,6 +10,7 @@ function getBiggestSmallest() {
     // all ?/n (where ? is varied and n is constant)
     // all ?-1/? (where ? is varied)
     // all n/? (where n is constant and ? is varied)
+    // all x/y improper fractions, where x is a multiple of y
 
     // TO-DO
     // all proper fractions (common denominator)
@@ -49,7 +50,7 @@ function fractions1() {
     var questionTypeId = 3;
     var answerValue = null;
 
-    for (var x=0; x<=3; x++)
+    for (var x=0; x<=4; x++)
     {
 
         questionTypeId = x + 2;
@@ -81,6 +82,8 @@ function fractions1() {
                 case 3:
                     var numerator = Math.floor(Math.random() * 100) + 1;
                     break;
+                case 4:
+                    break;
 
             }
 
@@ -102,6 +105,10 @@ function fractions1() {
                             break;
                         case 3:
                             var denominator = Math.floor(Math.random() * 100) + numerator;
+                            break;
+                        case 4:
+                            var denominator = Math.floor(Math.random() * 11) + 2;
+                            var numerator = denominator * (Math.floor(Math.random() * 12) + 1);
                             break;
                     }
 
