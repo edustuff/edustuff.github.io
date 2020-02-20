@@ -2,8 +2,19 @@ function getFractionsToDecimal() {
 
     var questions = [];
 
-    for (i = 1; i <= 5; i++) {
-        for (j = 1; j < i; j++) {
+    for (i = 1; i <= 8; i++) {
+
+        var maxNumerator = i;
+
+        if (i > 5) {
+            maxNumerator = 2;
+        }
+
+        if (i == 7) {
+            maxNumerator = 0;
+        }
+
+        for (j = 1; j < maxNumerator; j++) {
 
             var question = "What is \\({" + j + " \\over " + i + "}\\) as a decimal?";
 
@@ -11,8 +22,8 @@ function getFractionsToDecimal() {
 
             answer = answer + "";
 
-            if (answer.length > 4) {
-                answer = answer.substring(0, 6);
+            if (answer.length > 5) {
+                answer = answer.substring(0, 6) + "...";
             }
 
             questions.push({type : 1, question : question, answer: answer});
