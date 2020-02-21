@@ -16,7 +16,7 @@ function getFractionsToPercentage() {
 
         for (j = 1; j < maxNumerator; j++) {
 
-            var question = "What is \\({" + j + " \\over " + i + "}\\) as a decimal?";
+            var question = "What is \\({" + j + " \\over " + i + "}\\) as a percentage?";
 
             var answer = j / i * 100;
 
