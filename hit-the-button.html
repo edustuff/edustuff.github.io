@@ -106,9 +106,11 @@ questionMinor {
 
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.0/math.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.0/dist/mermaid.min.js"></script>
 
 <!--<script src="libs/tex-mml-chtml.js"></script>-->
 <!--<script src="libs/math.min.js"></script>-->
+<!--<script src="libs/mermaid.min.js"></script>-->
 
 <script src="questions/indicies.js"></script>
 <script src="questions/percentages.js"></script>
@@ -126,6 +128,7 @@ questionMinor {
 <script src="questions/adding-subtracting-negatives.js"></script>
 <script src="questions/dividing-by-fractions.js"></script>
 <script src="questions/midpoints.js"></script>
+<script src="questions/number-machines.js"></script>
 
 <script>
 
@@ -376,6 +379,10 @@ questionMinor {
         }
 
         MathJax.typeset();
+
+        mermaid.render('theGraph', document.getElementById("question").innerText, function(svgCode) {
+            document.getElementById("question").innerHTML = svgCode;});
+
     }
 
     function checkAnswer(event) {
@@ -494,6 +501,7 @@ questionMinor {
     <button class="grid-item" onclick="initialiseGame(addingSubtractingNegativeNumbers(),12,4,10);">Adding and subtracting negative numbers</button>
     <button class="grid-item" onclick="initialiseGame(dividingByFractions(),9,3,10);">Dividing by fractions</button>
     <button class="grid-item" onclick="initialiseGame(getMidpoints(),12,4,10);">Midpoints</button>
+    <button class="grid-item" onclick="initialiseGame(getNumberMachines(),12,4,10);">Number machines</button>
 </div>
 
 <div id="gameScreen">
