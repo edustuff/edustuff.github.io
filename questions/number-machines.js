@@ -30,6 +30,7 @@ function getNumberMachines() {
 
             var types = [];
             var stepResults = [];
+            var prompt = startingNumber;
 
             for (n = 1; n <=3; n++) {
 
@@ -38,6 +39,7 @@ function getNumberMachines() {
                 var nextStep1 = nextStep(startingNumber, nextStepNumber);
 
                 nextStepText = nextStep1.text;
+                prompt = prompt + ", " + nextStep1.desc;
 
                 types.push(nextStep1.option);
 
@@ -51,6 +53,8 @@ function getNumberMachines() {
 
                 nextStepNumber = nextStep1.number;
             }
+
+            prompt = prompt + " = " + nextStepNumber;
 
             if (x == 0) {
                 question = question + " --> " + step("?");
@@ -66,7 +70,7 @@ function getNumberMachines() {
 
             if (transitionOk) {
                 for (t=0; t<types.length; t++) {
-                    questions.push({type : types[t], question : question, answer: answer, prompt: "Answer = " + answer});
+                    questions.push({type : types[t], question : question, answer: answer, prompt: prompt});
                 }
             }
 
@@ -95,31 +99,31 @@ function nextStep(originalNumber, number) {
 
     switch(option) {
         case 1:
-            return {option: option, number: number + adjustment, text: step("add " + adjustment)};
+            return {option: option, number: number + adjustment, desc: "add " + adjustment, text: step("add " + adjustment)};
             break;
         case 2:
-            return {option: option, number: number - adjustment, text: step("subtract " + adjustment)};
+            return {option: option, number: number - adjustment, desc: "subtract " + adjustment, text: step("subtract " + adjustment)};
             break;
         case 3:
-            return {option: option, number: number * adjustment, text: step("multiply by " + adjustment)};
+            return {option: option, number: number * adjustment, desc: "multiply by " + adjustment, text: step("multiply by " + adjustment)};
             break;
         case 4:
-            return {option: option, number: number / adjustment, text: step("divide by " + adjustment)};
+            return {option: option, number: number / adjustment, desc: "divide by " + adjustment, text: step("divide by " + adjustment)};
             break;
         case 5:
-            return {option: option, number: number / 2, text: step("halve it")};
+            return {option: option, number: number / 2, desc: "halve it", text: step("halve it")};
             break;
         case 6:
-            return {option: option, number: number * 2, text: step("double it")};
+            return {option: option, number: number * 2, desc: "double it", text: step("double it")};
             break;
         case 7:
-            return {option: option, number: number * number, text: step("square it")};
+            return {option: option, number: number * number, desc: "square it", text: step("square it")};
             break;
         case 8:
-            return {option: option, number: number / originalNumber, text: step("divide by original number")};
+            return {option: option, number: number / originalNumber, desc: "divide by original number", text: step("divide by original number")};
             break;
         case 9:
-            return {option: option, number: number + (adjustment * originalNumber), text: step("add " + adjustment + " times original number")};
+            return {option: option, number: number + (adjustment * originalNumber), desc: "add " + adjustment + " times original number", text: step("add " + adjustment + " times original number")};
             break;
     }
 
