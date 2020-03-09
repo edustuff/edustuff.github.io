@@ -10,68 +10,78 @@ function getNumberMachines() {
 
     for (i = 1; i<1000; i++) {
 
-        for (x = 0; x <2; x++) {
+        for (l=2; l <=3; l++) {
 
-            id=0;
+            for (x = 0; x <2; x++) {
 
-            var startingNumber = round(Math.random() * 144, 0);
+                id=0;
 
-            var question = graphType;
+                var startingNumber = round(Math.random() * 144, 0);
 
-            if (x == 0) {
-                question = question + step(startingNumber);
-            } else {
-                question = question + step("?");
-            }
+                var question = graphType;
 
-            var nextStepNumber = startingNumber;
-
-            var transitionOk = true;
-
-            var types = [];
-            var stepResults = [];
-            var prompt = startingNumber;
-
-            for (n = 1; n <=3; n++) {
-
-                stepResults.push(nextStepNumber);
-
-                var nextStep1 = nextStep(startingNumber, nextStepNumber);
-
-                nextStepText = nextStep1.text;
-                prompt = prompt + ", " + nextStep1.desc;
-
-                types.push(nextStep1.option);
-
-                question = question + " --> " + nextStepText;
-
-                var nextNumberStr  = round(nextStep1.number,1) + "";
-
-                if (nextStepNumber == 0 || nextStepNumber == 1 ||   stepResults.includes(nextStep1.number) || nextStep1.number > 144 || round(nextStep1.number,1) != nextStep1.number || (round(nextStep1.number,0) != nextStep1.number && nextNumberStr[nextNumberStr.length-1] != "5")) {
-                    transitionOk = false;
+                if (x == 0) {
+                    question = question + step(startingNumber);
+                } else {
+                    question = question + step("?");
                 }
 
-                nextStepNumber = nextStep1.number;
-            }
+                var nextStepNumber = startingNumber;
 
-            prompt = prompt + " = " + nextStepNumber;
+                var transitionOk = true;
 
-            if (x == 0) {
-                question = question + " --> " + step("?");
-                answer = nextStepNumber;
-            } else {
-                question = question + " --> " + step(nextStepNumber);
-                answer = startingNumber;
-            }
+                var types = [];
+                var stepResults = [];
+                var prompt = startingNumber;
+                var decimalNumber = 0;
 
-            question = question + ";";
+                for (n = 1; n <=l; n++) {
 
-            question = question + graphFormatting;
+                    stepResults.push(nextStepNumber);
 
-            if (transitionOk) {
-                for (t=0; t<types.length; t++) {
-                    questions.push({type : types[t], question : question, answer: answer, prompt: prompt});
+                    var nextStep1 = nextStep(startingNumber, nextStepNumber);
+
+                    nextStepText = nextStep1.text;
+                    prompt = prompt + ", " + nextStep1.desc;
+
+                    types.push(nextStep1.option);
+
+                    question = question + " --> " + nextStepText;
+
+                    var nextNumberStr  = round(nextStep1.number,1) + "";
+
+                    if (round(nextStep1.number,0) != nextStep1.number && round(nextStep1.number,1) != nextStep1.number && nextNumberStr[nextNumberStr.length-1] != "5") {
+                        decimalNumber++;
+                    }
+
+//                    if ((x ==1 && question.indexOf("original") > 0) || nextStepNumber == 0 || nextStepNumber == 1 ||   stepResults.includes(nextStep1.number) || nextStep1.number > 144 || round(nextStep1.number,1) != nextStep1.number || (round(nextStep1.number,0) != nextStep1.number && nextNumberStr[nextNumberStr.length-1] != "5")) {
+                    if (decimalNumber > 0 || (x ==1 && question.indexOf("original") > 0) || nextStepNumber == 0 || nextStepNumber == 1 ||   stepResults.includes(nextStep1.number) || nextStep1.number > 144  || round(nextStep1.number,1) != nextStep1.number || (round(nextStep1.number,0) != nextStep1.number && nextNumberStr[nextNumberStr.length-1] != "5")) {
+                        transitionOk = false;
+                    }
+
+                    nextStepNumber = nextStep1.number;
                 }
+
+                prompt = prompt + " = " + nextStepNumber;
+
+                if (x == 0) {
+                    question = question + " --> " + step("?");
+                    answer = nextStepNumber;
+                } else {
+                    question = question + " --> " + step(nextStepNumber);
+                    answer = startingNumber;
+                }
+
+                question = question + ";";
+
+                question = question + graphFormatting;
+
+                if (transitionOk) {
+                    for (t=0; t<types.length; t++) {
+                        questions.push({type : types[t], question : question, answer: answer, prompt: prompt});
+                    }
+                }
+
             }
 
         }
@@ -93,7 +103,7 @@ function nextId() {
 
 function nextStep(originalNumber, number) {
 
-    var adjustment = round(Math.random() * 12, 0) + 1;
+    var adjustment = round(Math.random() * 11, 0) + 1;
 
     var option = round(Math.random() * 8, 0) + 1;
 
