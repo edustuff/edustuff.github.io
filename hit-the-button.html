@@ -50,6 +50,11 @@ button {
   margin-bottom: 0px;
 }
 
+.printed-question {
+  margin-left: 20pt;
+  font-size: 20pt;
+}
+
 questionMinor {
   padding: 3vw;
   font-size: 4vw;
@@ -85,6 +90,16 @@ questionMinor {
     top: 0px;
     width: 100%;
     visibility: hidden;
+}
+
+#printScreen {
+    position: absolute;
+    top: 0px;
+    left:0px;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    background: white;
 }
 
 #startScreen {
@@ -129,6 +144,8 @@ questionMinor {
 <script src="questions/dividing-by-fractions.js"></script>
 <script src="questions/midpoints.js"></script>
 <script src="questions/number-machines.js"></script>
+<script src="questions/multiply-divide-by-factors-of-ten.js"></script>
+<script src="questions/mixed-numbers-addition.js"></script>
 
 <script>
 
@@ -166,6 +183,10 @@ questionMinor {
 
     function showStartScreen() {
         document.getElementById("startScreen").style.visibility= 'visible' ;
+    }
+
+    function showPrintScreen() {
+        document.getElementById("printScreen").style.visibility= 'visible' ;
     }
 
     function hideStartScreen() {
@@ -214,7 +235,11 @@ questionMinor {
         console.log("Questions set");
 
         hideStartScreen();
-        showGameScreen();
+        if(document.getElementById("online").checked) {
+            showGameScreen();
+        } else {
+            showPrintScreen();
+        }
 
         console.log("Game screen displayed");
 
@@ -317,6 +342,21 @@ questionMinor {
                 uniqueAnswers.push(questions[i].answer);
                 uniqueQuestions.push(questions[i].question);
 
+                var equals = "";
+                if (!questions[i].question.includes("=")) {
+                    equals = " =";
+                }
+
+                var spacer = "";
+                for (x=1; x<70; x++) {
+                    spacer = spacer + '&nbsp';
+                }
+
+                var newQuestion = document.createElement("P");
+                newQuestion.setAttribute("class", "printed-question");
+                newQuestion.innerHTML = questions[i].question  + equals + spacer + questions[i].answer;
+                document.getElementById("printScreen").appendChild(newQuestion);
+
                 document.getElementById(uniqueAnswerIndex).innerHTML = questions[i].answer;
                 document.getElementById(uniqueAnswerIndex).setAttribute("questionid", i);
                 document.getElementById(uniqueAnswerIndex).onclick = function(){checkAnswer(event)};
@@ -344,7 +384,6 @@ questionMinor {
         }
 
         MathJax.typeset();
-
     }
 
 
@@ -380,8 +419,11 @@ questionMinor {
 
         MathJax.typeset();
 
-        mermaid.render('theGraph', document.getElementById("question").innerText, function(svgCode) {
-            document.getElementById("question").innerHTML = svgCode;});
+        if(document.getElementById("question").innerText.includes("graph LR;")) {
+            mermaid.render('theGraph', document.getElementById("question").innerText, function(svgCode) {
+                document.getElementById("question").innerHTML = svgCode;});
+        }
+
 
     }
 
@@ -481,8 +523,14 @@ questionMinor {
 
 <div id="startScreen">
     <p id="finalScore"></p>
+
+    <p>Game type:</p>
     <input type="radio" name="gameType" id="timer"> Timer<br>
     <input type="radio" name="gameType" id="count" checked> Counter<br>
+    <p>Game location:</p>
+    <input type="radio" name="screenType" id="online" checked> Online<br>
+    <input type="radio" name="screenType" id="paper"> Paper<br>
+
     <button class="grid-item" onclick="initialiseGame(getIndiciesQuestions(),12,4,10);">Squares, cubes and other powers 1</button>
     <button class="grid-item" onclick="initialiseGame(inverseQuestions(getIndiciesQuestions()),12,4,10);">Squares, cubes and other powers 2</button>
     <button class="grid-item" onclick="initialiseGame(getPercentageQuestions(),12,4,10);">Percentages 1</button>
@@ -502,6 +550,11 @@ questionMinor {
     <button class="grid-item" onclick="initialiseGame(dividingByFractions(),9,3,10);">Dividing by fractions</button>
     <button class="grid-item" onclick="initialiseGame(getMidpoints(),12,4,10);">Midpoints</button>
     <button class="grid-item" onclick="initialiseGame(getNumberMachines(),12,4,10);">Number machines</button>
+    <button class="grid-item" onclick="initialiseGame(getMultiplyDivideByFactorsOfTen(),12,4,10);">Multiply and divide by factors of ten</button>
+    <button class="grid-item" onclick="initialiseGame(getMixedNumberAdditions(),12,4,10);">Mixed number additions, subtractions, multiplications and divisions</button>
+</div>
+
+<div id="printScreen">
 </div>
 
 <div id="gameScreen">
