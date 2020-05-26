@@ -119,13 +119,13 @@ questionMinor {
 
 </head>
 
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.0/math.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.0/dist/mermaid.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.0/math.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.0/dist/mermaid.min.js"></script>-->
 
-<!--<script src="libs/tex-mml-chtml.js"></script>-->
-<!--<script src="libs/math.min.js"></script>-->
-<!--<script src="libs/mermaid.min.js"></script>-->
+<script src="libs/tex-mml-chtml.js"></script>
+<script src="libs/math.min.js"></script>
+<script src="libs/mermaid.min.js"></script>
 
 <script src="questions/indicies.js"></script>
 <script src="questions/percentages.js"></script>
@@ -146,6 +146,9 @@ questionMinor {
 <script src="questions/number-machines.js"></script>
 <script src="questions/multiply-divide-by-factors-of-ten.js"></script>
 <script src="questions/mixed-numbers-addition.js"></script>
+<script src="questions/divisions-with-decimal-remainders.js"></script>
+<script src="questions/vertical-maths.js"></script>
+<script src="questions/images.js"></script>
 
 <script>
 
@@ -354,7 +357,7 @@ questionMinor {
 
                 var newQuestion = document.createElement("P");
                 newQuestion.setAttribute("class", "printed-question");
-                newQuestion.innerHTML = questions[i].question  + equals + spacer + questions[i].answer;
+                newQuestion.innerHTML = questions[i].question;// + equals + spacer + questions[i].answer;
                 document.getElementById("printScreen").appendChild(newQuestion);
 
                 document.getElementById(uniqueAnswerIndex).innerHTML = questions[i].answer;
@@ -552,6 +555,9 @@ questionMinor {
     <button class="grid-item" onclick="initialiseGame(getNumberMachines(),12,4,10);">Number machines</button>
     <button class="grid-item" onclick="initialiseGame(getMultiplyDivideByFactorsOfTen(),12,4,10);">Multiply and divide by factors of ten</button>
     <button class="grid-item" onclick="initialiseGame(getMixedNumberAdditions(),12,4,10);">Mixed number additions, subtractions, multiplications and divisions</button>
+    <button class="grid-item" onclick="initialiseGame(getDivisionsWithDecimalRemainders(),12,4,10);">Divisions with decimal remainders</button>
+    <button class="grid-item" onclick="initialiseGame(getVerticalMaths(),12,4,10);">Vertical maths and short division</button>
+    <button class="grid-item" onclick="initialiseGame(getImages(),10,5,8);">Images</button>
 </div>
 
 <div id="printScreen">
