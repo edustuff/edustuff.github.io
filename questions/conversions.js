@@ -4,7 +4,7 @@ function getConversionQuestions() {
 
     var scales = [
         ["mm","cm","m","km"],
-        ["g","kg"],
+        ["mg","g","kg"],
         ["ml","cl","l"],
         ["mm2","cm2","m2"],
         ["mm3","cm3","m3"]
