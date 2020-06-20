@@ -20,7 +20,7 @@ function getMultiplyDivideByFactorsOfTen() {
 
         var type = 0;
 
-        for (a = 1; a <=3; a++) {
+        for (a = 1; a <=4; a++) {
 
             for (t = 1; t <=2; t++) {
 
