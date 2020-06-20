@@ -34,6 +34,22 @@ function getVerticalMaths() {
         for (i=1; i < 100; i++) {
             var num1 = numberOfLength(numberOfDigits, false);
             var num2 = numberOfLength(numberOfDigits, false);
+            num1 = Math.min(num1, num2);
+            num2 = Math.max(num1, num2);
+            if (num1 != num2) {
+                var question = num1 + " - " + num2;
+                var answer = num1 - num2;
+                questions.push({type : type, question : question, answer: answer});
+            }
+        }
+
+
+        var numberOfDigits=2;
+
+        type++;
+        for (i=1; i < 100; i++) {
+            var num1 = numberOfLength(numberOfDigits, false);
+            var num2 = numberOfLength(numberOfDigits, false);
             var question = num1 + " &times; " + num2;
             var answer = num1 * num2;
             questions.push({type : type, question : question, answer: answer});
