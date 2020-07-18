@@ -1,31 +1,8 @@
-function getVerticalMaths() {
+function getTemp() {
 
     var questions = [];
 
         var type = 0;
-
-        for(numberOfDigits=3;numberOfDigits<=4;numberOfDigits++)
-        {
-            type++;
-            for (i=1; i < 100; i++) {
-                var num1 = numberOfLength(numberOfDigits, false);
-                var num2 = getAdditionThatForcesCarrying(num1, numberOfDigits-1);
-                var question = num1 + " + " + num2;
-                var answer = num1 + num2;
-                questions.push({type : type, question : question, answer: answer});
-            }
-        }
-
-
-        type++;
-        for (i=1; i < 100; i++) {
-            var num1 = numberOfLength(1, false) / 10;
-            var num2 = numberOfLength(1, false) / 10;
-            var question = num1 + " + " + num2;
-            var answer = num1 + num2;
-            questions.push({type : type, question : question, answer: answer});
-        }
-
 
         type++;
         for (i=1; i < 100; i++) {
@@ -37,14 +14,23 @@ function getVerticalMaths() {
             questions.push({type : type, question : question, answer: answer});
         }
 
-        var numberOfDigits=4;
+        type++;
+        for (i=100; i < 200; i++) {
+            var num1 = i;
+            var num2 = 1.25;
+            var answer = num1 / num2;
+            if (answer == Math.round(answer)) {
+                var question = num1 + " &divide; " + num2;
+                questions.push({type : type, question : question, answer: answer});
+            }
+        }
 
         type++;
-        for (i=1; i < 100; i++) {
-            var num1 = numberOfLength(numberOfDigits, true);
-            var num2 = getSubtractionThatForcesBorrowing(num1, numberOfDigits-1);
-            var question = num1 + " - " + num2;
-            var answer = num1 - num2;
+        for (i=1; i < 100; i=i+2) {
+            var num1 = round(i / 100, 2);
+            var num2 = 2;
+            var question = num1 + " &divide; " + num2;
+            var answer = round(num1 / num2, 3);
             questions.push({type : type, question : question, answer: answer});
         }
 
@@ -64,30 +50,24 @@ function getVerticalMaths() {
             }
         }
 
-
-        var numberOfDigits=2;
-
         type++;
-        for (i=1; i < 100; i++) {
-            var num1 = numberOfLength(numberOfDigits, false);
-            var num2 = numberOfLength(numberOfDigits, false);
-            var question = num1 + " &times; " + num2;
-            var answer = num1 * num2;
+        for (i=101; i < 300; i=i+2) {
+            var num1 = i;
+            var num2 = 4;
+            var question = num1 + " &divide; " + num2;
+            var answer = round(num1 / num2, 2);
             questions.push({type : type, question : question, answer: answer});
         }
 
         type++;
-        for (i=1; i < 1500; i++) {
-            for (j=3; j<10; j++) {
-                var num1 = i;
-                var num2 = j;
-                var answer = num1 / num2;
-                if (answer == Math.round(answer) && answer > 12) {
-                    var question = num1 + " &divide; " + num2;
-                    questions.push({type : type, question : question, answer: answer});
-                }
-            }
+        for (i=101; i < 300; i=i+2) {
+            var num1 = i / 100;
+            var num2 = 20;
+            var question = num1 + " &divide; " + num2;
+            var answer = round(num1 / num2, 4);
+            questions.push({type : type, question : question, answer: answer});
         }
+
 
     return questions;
 

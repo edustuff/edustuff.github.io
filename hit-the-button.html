@@ -12,6 +12,20 @@
    font-family: sans-serif;
 }
 
+@media print {
+    #printScreen{
+        width: 21cm;
+        height: 29.7cm;
+        margin: 0mm 10mm 0mm 10mm;
+        /* change the margins as you want them to be. */
+   }
+}
+
+table { page-break-inside:auto }
+tr    { page-break-inside:avoid; page-break-after:auto }
+thead { display:table-header-group }
+tfoot { display:table-footer-group }
+
 .grid-item {
   padding-top:3vh;
   padding-bottom:3vh;
@@ -53,6 +67,11 @@ button {
 .printed-question {
   margin-left: 20pt;
   font-size: 20pt;
+}
+
+.printed-question-minor {
+  margin-left: 10pt;
+  font-size: 10pt;
 }
 
 questionMinor {
@@ -122,6 +141,8 @@ questionMinor {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.0/math.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.0/dist/mermaid.min.js"></script>
+<!--<script src="https://www.gstatic.com/charts/loader.js"></script>-->
+<script src="https://code.highcharts.com/highcharts.js"></script>
 
 <!--<script src="libs/tex-mml-chtml.js"></script>-->
 <!--<script src="libs/math.min.js"></script>-->
@@ -148,7 +169,11 @@ questionMinor {
 <script src="questions/mixed-numbers-addition.js"></script>
 <script src="questions/divisions-with-decimal-remainders.js"></script>
 <script src="questions/vertical-maths.js"></script>
+<script src="questions/vertical-maths2.js"></script>
+<script src="questions/line-charts2.js"></script>
+<script src="questions/algebra-table.js"></script>
 <script src="questions/images.js"></script>
+<script src="questions/temp.js"></script>
 
 <script>
 
@@ -170,7 +195,6 @@ questionMinor {
     var questions = [];
     var uniqueAnswers = [];
     var questionsAsked = [];
-
 
     function inverseQuestions(originalQuestions) {
 
@@ -336,11 +360,25 @@ questionMinor {
 
         var attempt = 0;
 
-        while (uniqueAnswerIndex < numberOfQuestions && attempt < 1000) {
+        var table = document.createElement("TABLE");
+
+        var answers = document.createElement("P");
+
+        //answers.style.width = "685mm";
+
+        //table.width = "100%";
+
+        table.border = "1";
+
+        document.getElementById("printScreen").appendChild(answers);
+        document.getElementById("printScreen").appendChild(table);
+
+        while (uniqueAnswerIndex < numberOfQuestions && attempt < 10000) {
 
             attempt = attempt + 1;
 
-            if (questions[i].type == curType && uniqueAnswers.indexOf(questions[i].answer) == -1 && uniqueQuestions.indexOf(questions[i].question) == -1) {
+            //if (questions[i].type == curType && uniqueAnswers.indexOf(questions[i].answer) == -1 && uniqueQuestions.indexOf(questions[i].question) == -1) {
+            if (questions[i].type == curType && uniqueQuestions.indexOf(questions[i].question) == -1) {
 
                 uniqueAnswers.push(questions[i].answer);
                 uniqueQuestions.push(questions[i].question);
@@ -356,9 +394,55 @@ questionMinor {
                 }
 
                 var newQuestion = document.createElement("P");
-                newQuestion.setAttribute("class", "printed-question");
+
+                answers.innerHTML = answers.innerHTML + questions[i].answer + ", ";
+
+                var row = document.createElement("TR");
+
+                var column1 = document.createElement("TD");
+                column1.width = "550mm";
+                column1.height = "92mm";
+
+                var column2 = document.createElement("TD");
+                var answerSpace = document.createElement("P");
+                answerSpace.style = "text-align: center";
+                answerSpace.innerHTML = ".............";
+                column2.appendChild(answerSpace);
+                column2.width = "150mm";
+
+                table.appendChild(row);
+
+                row.appendChild(column1);
+                row.appendChild(column2);
+
+                column1.appendChild(newQuestion);
+
                 newQuestion.innerHTML = questions[i].question;// + equals + spacer + questions[i].answer;
-                document.getElementById("printScreen").appendChild(newQuestion);
+
+                console.log(newQuestion.textContent);
+
+                if (newQuestion.textContent.length < 20) {
+                    newQuestion.setAttribute("class", "printed-question");
+                } else {
+                    newQuestion.setAttribute("class", "printed-question-minor");
+                }
+
+                if(questions[i].data != undefined) {
+
+                    var newElement = document.createElement("DIV");
+
+                    newQuestion.appendChild(newElement);
+
+                    newElement.style.width = "130mm";
+                    newElement.style.height = "50mm";
+
+                    //var chart = new google.visualization.LineChart(newElement);
+                    //chart.draw(questions[i].data, questions[i].options);
+
+                    questions[i].data(newElement);
+
+                }
+
 
                 document.getElementById(uniqueAnswerIndex).innerHTML = questions[i].answer;
                 document.getElementById(uniqueAnswerIndex).setAttribute("questionid", i);
@@ -387,6 +471,21 @@ questionMinor {
         }
 
         MathJax.typeset();
+
+        var printedQuestions = document.getElementsByClassName("printed-question");
+
+        for (i=printedQuestions.length-1; i>=0; i--) {
+
+            var text = printedQuestions[i].textContent;
+
+            if(text.includes("graph LR;")) {
+                console.log("rendering: " + text);
+                mermaid.render('theGraph' + i, text, function(svgCode) {
+                    printedQuestions[i].innerHTML = svgCode;});
+            }
+
+        }
+
     }
 
 
@@ -425,6 +524,19 @@ questionMinor {
         if(document.getElementById("question").innerText.includes("graph LR;")) {
             mermaid.render('theGraph', document.getElementById("question").innerText, function(svgCode) {
                 document.getElementById("question").innerHTML = svgCode;});
+        }
+
+        if(currentQuestion.data != undefined) {
+
+            var newElement = document.createElement("DIV");
+
+            document.getElementById("question").appendChild(newElement);
+
+            //var chart = new google.visualization.LineChart(newElement);
+            //chart.draw(currentQuestion.data, currentQuestion.options);
+
+            currentQuestion.data(newElement);
+
         }
 
 
@@ -525,6 +637,7 @@ questionMinor {
 <body>
 
 <div id="startScreen">
+
     <p id="finalScore"></p>
 
     <p>Game type:</p>
@@ -534,14 +647,14 @@ questionMinor {
     <input type="radio" name="screenType" id="online" checked> Online<br>
     <input type="radio" name="screenType" id="paper"> Paper<br>
 
-    <button class="grid-item" onclick="initialiseGame(getIndiciesQuestions(),12,4,10);">Squares, cubes and other powers 1</button>
+    <button class="grid-item" onclick="initialiseGame(getIndiciesQuestions(),23,4,10);">Squares, cubes and other powers 1</button>
     <button class="grid-item" onclick="initialiseGame(inverseQuestions(getIndiciesQuestions()),12,4,10);">Squares, cubes and other powers 2</button>
-    <button class="grid-item" onclick="initialiseGame(getPercentageQuestions(),12,4,10);">Percentages 1</button>
+    <button class="grid-item" onclick="initialiseGame(getPercentageQuestions(),15,4,10);">Percentages 1</button>
     <button class="grid-item" onclick="initialiseGame(inverseQuestions(getPercentageQuestions()),12,4,10);">Percentages 2</button>
     <button class="grid-item" onclick="initialiseGame(getPrimeQuestions(),2,2,20);">Prime numbers</button>
     <button class="grid-item" onclick="initialiseGame(getSequenceQuestions(),12,4,10);">Sequences</button>
-    <button class="grid-item" onclick="initialiseGame(getOperationOrderQuestions(),12,4,10);">BIDMAS</button>
-    <button class="grid-item" onclick="initialiseGame(getConversionQuestions(),12,4,10);">Unit conversions</button>
+    <button class="grid-item" onclick="initialiseGame(getOperationOrderQuestions(),15,4,10);">BIDMAS</button>
+    <button class="grid-item" onclick="initialiseGame(getConversionQuestions(),15,4,10);">Unit conversions</button>
     <button class="grid-item" onclick="initialiseGame(getMeanAverageQuestions(),8,4,10);">Averages</button>
     <button class="grid-item" onclick="initialiseGame(getFractionsToDecimal(),11,3,11);">Fractions to decimals</button>
     <button class="grid-item" onclick="initialiseGame(getFractionsToPercentage(),11,3,11);">Fractions to percentage</button>
@@ -551,13 +664,17 @@ questionMinor {
     <button class="grid-item" onclick="initialiseGame(getBiggestSmallest(),5,5,10);">Biggest and smallest</button>
     <button class="grid-item" onclick="initialiseGame(addingSubtractingNegativeNumbers(),12,4,10);">Adding and subtracting negative numbers</button>
     <button class="grid-item" onclick="initialiseGame(dividingByFractions(),9,3,10);">Dividing by fractions</button>
-    <button class="grid-item" onclick="initialiseGame(getMidpoints(),12,4,10);">Midpoints</button>
-    <button class="grid-item" onclick="initialiseGame(getNumberMachines(),12,4,10);">Number machines</button>
+    <button class="grid-item" onclick="initialiseGame(getMidpoints(),7,4,10);">Midpoints</button>
+    <button class="grid-item" onclick="initialiseGame(getNumberMachines(),15,4,10);">Number machines</button>
     <button class="grid-item" onclick="initialiseGame(getMultiplyDivideByFactorsOfTen(),12,4,10);">Multiply and divide by factors of ten</button>
     <button class="grid-item" onclick="initialiseGame(getMixedNumberAdditions(),12,4,10);">Mixed number additions, subtractions, multiplications and divisions</button>
     <button class="grid-item" onclick="initialiseGame(getDivisionsWithDecimalRemainders(),12,4,10);">Divisions with decimal remainders</button>
     <button class="grid-item" onclick="initialiseGame(getVerticalMaths(),12,4,10);">Vertical maths and short division</button>
+    <button class="grid-item" onclick="initialiseGame(getVerticalMaths2(),22,4,10);">Vertical maths and short division 2</button>
+    <button class="grid-item" onclick="initialiseGame(getChartQuestions(),12,2,10);">Line charts</button>
+    <button class="grid-item" onclick="initialiseGame(getAlgebraTableQuestions(),12,2,10);">Algebra Tables</button>
     <button class="grid-item" onclick="initialiseGame(getImages(),10,5,8);">Images</button>
+    <button class="grid-item" onclick="initialiseGame(getTemp(),14,5,8);">Temp</button>
 </div>
 
 <div id="printScreen">

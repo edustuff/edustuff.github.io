@@ -41,7 +41,7 @@ function createSequence(typeId, minBase, maxBase, stepSize, questions, transform
 
         var missingTermPosition = Math.floor(Math.random() * sequenceCount);
 
-        var sequence = "<p class='questionMinor'>What is the missing term in this sequence?</p>";
+        var sequence = "";//"<p class='questionMinor'>What is the missing term in this sequence?</p>";
 
         var answer = "";
 
