@@ -44,6 +44,46 @@ function getMixedNumberAdditions() {
                         var answerMult = "\\({" + answerNumeratorMult + " \\over " + answerDenominatorMult + "}\\)";
                         var answerDiv = "\\({" + answerNumeratorDiv + " \\over " + answerDenominatorDiv + "}\\)";
 
+                        if (answerNumeratorAdd > answerDenominator) {
+
+                            var mixedNumber = improperFractionToMixedNumber(answerNumeratorAdd, answerDenominator);
+
+                            if (mixedNumber.n > 0) {
+                                var answerAdd = mixedNumber.i + "\\({" + mixedNumber.n + " \\over " + mixedNumber.d + "}\\)";
+                            }
+
+                        }
+
+                        if (answerNumeratorSub > answerDenominator) {
+
+                            var mixedNumber = improperFractionToMixedNumber(answerNumeratorSub, answerDenominator);
+
+                            if (mixedNumber.n > 0) {
+                                var answerSub = mixedNumber.i + "\\({" + mixedNumber.n + " \\over " + mixedNumber.d + "}\\)";
+                            }
+
+                        }
+
+                        if (answerNumeratorMult > answerDenominatorMult) {
+
+                            var mixedNumber = improperFractionToMixedNumber(answerNumeratorMult, answerDenominatorMult);
+
+                            if (mixedNumber.n > 0) {
+                                var answerMult = mixedNumber.i + "\\({" + mixedNumber.n + " \\over " + mixedNumber.d + "}\\)";
+                            }
+
+                        }
+
+                        if (answerNumeratorDiv > answerDenominatorDiv) {
+
+                            var mixedNumber = improperFractionToMixedNumber(answerNumeratorDiv, answerDenominatorDiv);
+
+                            if (mixedNumber.n > 0) {
+                                var answerDiv = mixedNumber.i + "\\({" + mixedNumber.n + " \\over " + mixedNumber.d + "}\\)";
+                            }
+
+                        }
+
         //                var simplifiedAnswerAdd = reduce(answerNumeratorAdd, answerDenominator);
         //                var simplifiedAnswerSub = reduce(answerNumeratorSub, answerDenominator);
         //

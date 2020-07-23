@@ -49,17 +49,17 @@ function getAlgebraTableQuestions() {
             table = table + "<TH width='100cm'>n</TH>";
             table = table + "<TH width='100cm'>" + formula + "</TH>";
 
-            table = table + "<TR height='40cm'>";
+            table = table + "<TR height='35cm'>";
             table = table + "<TD style='text-align:center'>" + example_n + "</TD>";
             table = table + "<TD style='text-align:center'>" + example_a + "</TD>";
             table = table + "</TR>";
 
-            table = table + "<TR height='40cm'>";
+            table = table + "<TR height='35cm'>";
             table = table + "<TD style='text-align:center'>" + n1 + "</TD>";
             table = table + "<TD></TD>";
             table = table + "</TR>";
 
-            table = table + "<TR height='40cm'>";
+            table = table + "<TR height='35cm'>";
             table = table + "<TD></TD>";
             table = table + "<TD style='text-align:center'>" + a2 + "</TD>";
             table = table + "</TR>";

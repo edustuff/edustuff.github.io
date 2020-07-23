@@ -144,6 +144,9 @@ questionMinor {
 <!--<script src="https://www.gstatic.com/charts/loader.js"></script>-->
 <script src="https://code.highcharts.com/highcharts.js"></script>
 
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
 <!--<script src="libs/tex-mml-chtml.js"></script>-->
 <!--<script src="libs/math.min.js"></script>-->
 <!--<script src="libs/mermaid.min.js"></script>-->
@@ -172,6 +175,8 @@ questionMinor {
 <script src="questions/vertical-maths2.js"></script>
 <script src="questions/line-charts2.js"></script>
 <script src="questions/algebra-table.js"></script>
+<script src="questions/shape-maths.js"></script>
+<script src="questions/coords.js"></script>
 <script src="questions/images.js"></script>
 <script src="questions/temp.js"></script>
 
@@ -401,7 +406,7 @@ questionMinor {
 
                 var column1 = document.createElement("TD");
                 column1.width = "550mm";
-                column1.height = "92mm";
+                column1.height = "135mm";
 
                 var column2 = document.createElement("TD");
                 var answerSpace = document.createElement("P");
@@ -520,6 +525,7 @@ questionMinor {
         }
 
         MathJax.typeset();
+        window.onload();
 
         if(document.getElementById("question").innerText.includes("graph LR;")) {
             mermaid.render('theGraph', document.getElementById("question").innerText, function(svgCode) {
@@ -641,6 +647,9 @@ questionMinor {
     <p id="finalScore"></p>
 
     <p>Game type:</p>
+
+    <!--\draw[step=1cm,gray,very thin] (-10,-10) grid (10,10);-->
+
     <input type="radio" name="gameType" id="timer"> Timer<br>
     <input type="radio" name="gameType" id="count" checked> Counter<br>
     <p>Game location:</p>
@@ -658,21 +667,23 @@ questionMinor {
     <button class="grid-item" onclick="initialiseGame(getMeanAverageQuestions(),8,4,10);">Averages</button>
     <button class="grid-item" onclick="initialiseGame(getFractionsToDecimal(),11,3,11);">Fractions to decimals</button>
     <button class="grid-item" onclick="initialiseGame(getFractionsToPercentage(),11,3,11);">Fractions to percentage</button>
-    <button class="grid-item" onclick="initialiseGame(getFractionAdditions(),12,4,10);">Fraction additions, subtractions, multiplications and divisions</button>
+    <button class="grid-item" onclick="initialiseGame(getFractionAdditions(),8,4,10);">Fraction additions, subtractions, multiplications and divisions</button>
     <button class="grid-item" onclick="initialiseGame(getFractionSimplifications(),9,3,10);">Simplify fractions</button>
     <button class="grid-item" onclick="initialiseGame(getFractionOf(),5,5,10);">Fraction of...</button>
-    <button class="grid-item" onclick="initialiseGame(getBiggestSmallest(),5,5,10);">Biggest and smallest</button>
+    <button class="grid-item" onclick="initialiseGame(getBiggestSmallest(),7,5,10);">Biggest and smallest</button>
     <button class="grid-item" onclick="initialiseGame(addingSubtractingNegativeNumbers(),12,4,10);">Adding and subtracting negative numbers</button>
     <button class="grid-item" onclick="initialiseGame(dividingByFractions(),9,3,10);">Dividing by fractions</button>
     <button class="grid-item" onclick="initialiseGame(getMidpoints(),7,4,10);">Midpoints</button>
     <button class="grid-item" onclick="initialiseGame(getNumberMachines(),15,4,10);">Number machines</button>
     <button class="grid-item" onclick="initialiseGame(getMultiplyDivideByFactorsOfTen(),12,4,10);">Multiply and divide by factors of ten</button>
-    <button class="grid-item" onclick="initialiseGame(getMixedNumberAdditions(),12,4,10);">Mixed number additions, subtractions, multiplications and divisions</button>
+    <button class="grid-item" onclick="initialiseGame(getMixedNumberAdditions(),8,4,10);">Mixed number additions, subtractions, multiplications and divisions</button>
     <button class="grid-item" onclick="initialiseGame(getDivisionsWithDecimalRemainders(),12,4,10);">Divisions with decimal remainders</button>
     <button class="grid-item" onclick="initialiseGame(getVerticalMaths(),12,4,10);">Vertical maths and short division</button>
     <button class="grid-item" onclick="initialiseGame(getVerticalMaths2(),22,4,10);">Vertical maths and short division 2</button>
     <button class="grid-item" onclick="initialiseGame(getChartQuestions(),12,2,10);">Line charts</button>
-    <button class="grid-item" onclick="initialiseGame(getAlgebraTableQuestions(),12,2,10);">Algebra Tables</button>
+    <button class="grid-item" onclick="initialiseGame(getAlgebraTableQuestions(),10,2,10);">Algebra Tables</button>
+    <button class="grid-item" onclick="initialiseGame(getShapeMaths(),17,2,10);">Shapes</button>
+    <button class="grid-item" onclick="initialiseGame(getCoordQuestions(),10,2,10);">Coordinates</button>
     <button class="grid-item" onclick="initialiseGame(getImages(),10,5,8);">Images</button>
     <button class="grid-item" onclick="initialiseGame(getTemp(),14,5,8);">Temp</button>
 </div>
