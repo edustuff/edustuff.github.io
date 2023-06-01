@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Text-to-Speech Demo</title>
+</head>
+<body>
+<h1>Text-to-Speech Demo</h1>
+<input type="text" id="textInput" placeholder="Enter text">
+<button onclick="speakText()">Speak</button>
+
+<script>
+    var utterance = new SpeechSynthesisUtterance();
+
+    function speakText() {
+      var text = document.getElementById("textInput").value;
+      if ('speechSynthesis' in window) {
+        var synthesis = window.speechSynthesis;
+        synthesis.cancel(); // Cancel any ongoing speech
+        utterance.text = text; // Update the utterance text
+        synthesis.speak(utterance);
+      } else {
+        alert("Sorry, your browser doesn't support speech synthesis.");
+      }
+    }
+  </script>
+</body>
+</html>
