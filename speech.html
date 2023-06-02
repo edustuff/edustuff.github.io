@@ -46,8 +46,8 @@
     function speakText(text) {
       if ('speechSynthesis' in window) {
         var synthesis = window.speechSynthesis;
-        //synthesis.cancel();
-        utterance.text = text;
+        synthesis.cancel();
+        utterance.text = "" + text;
         synthesis.speak(utterance);
       } else {
         alert("Sorry, your browser doesn't support speech synthesis.");
