@@ -30,11 +30,11 @@
     </style>
 </head>
 <body>
+<audio id="audioPlayer" width="300" height="32" controls="controls"><source src="boom.mp3" type="audio/mpeg" /><source src="filename.ogg" type="audio/ogg" /></audio>
 <div class="button-container">
 <button id="passButton" onclick="passUpdate()">Pass</button>
 <button onclick="intercepted()">Intercepted</button>
 <button onclick="start()">Start</button>
-<audio id="audioPlayer" width="300" height="32" controls="controls"><source src="boom.mp3" type="audio/mpeg" /><source src="filename.ogg" type="audio/ogg" /></audio>
 </div>
 
 <script>
@@ -42,7 +42,6 @@
     var pass = 0;
     var counter = 6;
     var utterance = new SpeechSynthesisUtterance();
-    var audio = new Audio('boom.mp3');
 
     function speakText(text) {
       if ('speechSynthesis' in window) {
