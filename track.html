@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-View App</title>
+    <style>
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #f0f0f0;
+    padding: 10px;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: #333;
+    padding: 10px;
+}
+
+section {
+    padding: 20px;
+    display: none;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#view1Buttons, #view2Buttons {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Set the height to 100% */
+    justify-content: space-between;
+}
+
+#view1Buttons button, #view2Buttons button {
+    flex-grow: 1; /* Make the buttons take up all available vertical space */
+    margin-bottom: 10px;
+}
+
+    </style>
+</head>
+<body>
+
+<nav>
+    <button onclick="showView(1)">Players</button>
+    <button onclick="showView(2)">Moves</button>
+    <button onclick="showView(3)">Record</button>
+    <button onclick="showView(4)">Summary</button>
+</nav>
+
+<section id="view1">
+    <label for="text1">Add Item:</label>
+    <input type="text" id="text1">
+    <button onclick="addItem(1)">Add</button>
+    <ul id="list1"></ul>
+</section>
+
+<section id="view2">
+    <label for="text2">Add Item:</label>
+    <input type="text" id="text2">
+    <button onclick="addItem(2)">Add</button>
+    <ul id="list2"></ul>
+</section>
+
+<section id="view3">
+    <div class="column">
+        <div id="player">.</div>
+        <ul id="view1Buttons"></ul>
+    </div>
+    <div class="column">
+        <div id="move">.</div>
+        <ul id="view2Buttons"></ul>
+    </div>
+</section>
+
+<section id="view4">
+    <div id="summaryTables"></div>
+</section>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            showView(1);
+            loadItems(1);
+            loadItems(2);
+            loadView3Buttons();
+        });
+
+        function showView(viewNumber) {
+            document.querySelectorAll('section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(`view${viewNumber}`).style.display = 'block';
+            if (viewNumber == 4) {
+                createSummaryTable();
+                populateSummaryTable();
+            }
+        }
+
+        function addItem(viewNumber) {
+            const input = document.getElementById(`text${viewNumber}`);
+            const list = document.getElementById(`list${viewNumber}`);
+            const itemValue = input.value.trim();
+
+            if (itemValue !== '') {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <input type="checkbox" id="checkbox_${viewNumber}_${itemValue}" onclick="updateCheckbox(${viewNumber}, '${itemValue}')">
+                    <label for="checkbox_${viewNumber}_${itemValue}">${itemValue}</label>
+                `;
+                list.appendChild(listItem);
+                input.value = '';
+
+                saveItems(viewNumber);
+            }
+        }
+
+        function updateCheckbox(viewNumber, itemValue) {
+            const checkbox = document.getElementById(`checkbox_${viewNumber}_${itemValue}`);
+            saveItems(viewNumber);
+        }
+
+        function saveItems(viewNumber) {
+            const list = document.getElementById(`list${viewNumber}`);
+            const items = [];
+
+            list.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                items.push({
+                    value: checkbox.nextElementSibling.textContent,
+                    checked: checkbox.checked
+                });
+            });
+
+            localStorage.setItem(`items${viewNumber}`, JSON.stringify(items));
+            loadView3Buttons();
+        }
+
+        function loadItems(viewNumber) {
+            const list = document.getElementById(`list${viewNumber}`);
+            const items = JSON.parse(localStorage.getItem(`items${viewNumber}`)) || [];
+
+            items.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <input type="checkbox" id="checkbox_${viewNumber}_${item.value}" onclick="updateCheckbox(${viewNumber}, '${item.value}')" ${item.checked ? 'checked' : ''}>
+                    <label for="checkbox_${viewNumber}_${item.value}">${item.value}</label>
+                `;
+                list.appendChild(listItem);
+            });
+        }
+
+        function getCurrentDate() {
+            // Create a new Date object
+            var currentDate = new Date();
+
+            // Get the current date components
+            var year = currentDate.getFullYear();
+            var month = currentDate.getMonth() + 1; // Months are zero-based, so we add 1
+            var day = currentDate.getDate();
+
+            // Format the date as "YYYY-MM-DD"
+            var formattedDate = year + "-" + (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + day;
+
+            // Return the formatted date string
+            return formattedDate;
+        }
+
+        function getCurrentTime() {
+            // Create a new Date object
+            var currentTime = new Date();
+
+            // Get the current time components
+            var hours = currentTime.getHours();
+            var minutes = currentTime.getMinutes();
+            var seconds = currentTime.getSeconds();
+
+            // Format the time as "hh:mm:ss"
+            var formattedTime = (hours < 10 ? "0" : "") + hours + ":" +
+                                (minutes < 10 ? "0" : "") + minutes + ":" +
+                                (seconds < 10 ? "0" : "") + seconds;
+
+            // Return the formatted time string
+            return formattedTime;
+        }
+
+        function loadView3Buttons() {
+            const view1Buttons = document.getElementById('view1Buttons');
+            const view2Buttons = document.getElementById('view2Buttons');
+            view1Buttons.innerHTML = '';
+            view2Buttons.innerHTML = '';
+
+            const items1 = JSON.parse(localStorage.getItem('items1')) || [];
+            const items2 = JSON.parse(localStorage.getItem('items2')) || [];
+
+            items1.forEach(item => {
+                if (item.checked) {
+                    const button = document.createElement('button');
+                    button.textContent = item.value;
+                    button.addEventListener('click', function() {
+                        var playerName = event.target.textContent || event.target.innerText;
+                        document.getElementById("player").innerText = playerName;
+                        document.getElementById("move").innerText = ".";
+                    });
+                    view1Buttons.appendChild(button);
+                }
+            });
+
+            items2.forEach(item => {
+                if (item.checked) {
+                    const button = document.createElement('button');
+                    button.textContent = item.value;
+                    button.addEventListener('click', function() {
+                        var moveName = event.target.textContent || event.target.innerText;
+                        document.getElementById("move").innerText = moveName;
+
+                        var playerName = document.getElementById("player").innerText
+
+                        var curDate = getCurrentDate();
+                        var curTime = getCurrentTime();
+
+                        const primaryKey = curDate;
+                        const secondaryKey = playerName;
+                        const dataObject = { date: curDate, time: curTime, player: playerName, move: moveName };
+
+                        addObjectToLocalStorage(primaryKey, secondaryKey, dataObject);
+
+                    });
+                    view2Buttons.appendChild(button);
+                }
+            });
+        }
+
+        function createSummaryTable() {
+
+            const jsonData = localStorage.getItem(getCurrentDate());
+
+            // Parse JSON data
+            const data = JSON.parse(jsonData);
+
+            // Get the container element where tables will be added
+            const container = document.getElementById('summaryTables');
+            container.innerText = "";
+
+            const summaryTable = document.createElement('table');
+            const headerRow = summaryTable.createTHead().insertRow(0);
+
+            // Create table headers
+            const headers = ['Player', 'Total Moves'];
+            for (const header of headers) {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            }
+
+            // Populate the summary table with data
+            for (const boyName in data) {
+                if (data.hasOwnProperty(boyName)) {
+                    const row = summaryTable.insertRow();
+
+                    // Add boy's name to the first column
+                    const nameCell = row.insertCell();
+                    nameCell.textContent = boyName;
+
+                    // Add total number of moves to the second column
+                    const movesCell = row.insertCell();
+                    movesCell.textContent = data[boyName].length;
+                }
+            }
+
+            // Append the summary table to the container
+            container.appendChild(summaryTable);
+        }
+
+        function populateSummaryTable() {
+            // Retrieve JSON data from local storage
+            const jsonData = localStorage.getItem(getCurrentDate());
+
+            // Parse JSON data
+            const data = JSON.parse(jsonData);
+
+            // Get the container element where tables will be added
+            const container = document.getElementById('summaryTables');
+
+            // Iterate through each boy's name in the JSON
+            for (const boyName in data) {
+                if (data.hasOwnProperty(boyName)) {
+                    // Create a table for each boy's name
+                    const table = document.createElement('table');
+                    const headerRow = table.createTHead().insertRow(0);
+
+                    // Create table headers
+                    for (const header of ['Date', 'Time', 'Player', 'Move']) {
+                        const th = document.createElement('th');
+                        th.textContent = header;
+                        headerRow.appendChild(th);
+                    }
+
+                    // Populate the table with data for the current boy's name
+                    for (const move of data[boyName]) {
+                        const row = table.insertRow();
+
+                        // Add data cells
+                        for (const key of ['date', 'time', 'player', 'move']) {
+                            const cell = row.insertCell();
+                            cell.textContent = move[key];
+                        }
+                    }
+
+                    // Append the table to the container
+                    container.appendChild(table);
+                }
+            }
+        }
+
+        function addObjectToLocalStorage(primarykey, secondaryKey, obj) {
+          // Retrieve existing data from local storage
+          let localStorageData = JSON.parse(localStorage.getItem(primarykey)) || {};
+
+          // Retrieve the array associated with the secondary key, or create a new one if it doesn't exist
+          let dataArray = localStorageData[secondaryKey] || [];
+
+          // Add the object to the array
+          dataArray.push(obj);
+
+          // Update the data in local storage
+          localStorageData[secondaryKey] = dataArray;
+          localStorage.setItem(primarykey, JSON.stringify(localStorageData));
+        }
+
+    </script>
+
+</body>
+</html>
